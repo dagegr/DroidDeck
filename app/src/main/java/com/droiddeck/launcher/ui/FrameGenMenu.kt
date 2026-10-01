@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import com.droiddeck.launcher.gpu.FrameGen
 
@@ -12,7 +14,7 @@ internal fun FrameGenMenu(
     host: MenuHost, engine: String, multiplier: Int, lsfgReady: Boolean,
     onPick: (engine: String, multiplier: Int) -> Unit,
 ) {
-    AnchoredMenu(host.open == "fg", onDismiss = { if (host.open == "fg") host.open = null }, title = "Frame generation") { firstItemFocus ->
+    AnchoredMenu(host.open == "fg", onDismiss = { if (host.open == "fg") host.open = null }, title = stringResource(R.string.ui_fb701b84)) { firstItemFocus ->
         val need = if (lsfgReady) null else "Needs Lossless Scaling installed in Steam"
         fun pick(e: String, m: Int) { onPick(e, m); host.open = null }
         MenuItem("Off", checked = engine == FrameGen.ENGINE_OFF, focusRequester = firstItemFocus) { pick(FrameGen.ENGINE_OFF, 2) }
