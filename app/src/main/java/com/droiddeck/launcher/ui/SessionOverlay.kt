@@ -192,6 +192,7 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
     val colors = MaterialTheme.colorScheme
     val pal = LocalPalette.current
     val host = rememberMenuHost()
+    val qamDesc = stringResource(R.string.ui_f11f1682)
     var androidAppsExpanded by rememberSaveable { mutableStateOf(false) }
     var appToChooseDisplay by remember { mutableStateOf<HomeApp.LaunchableApp?>(null) }
     var confirmStop by remember { mutableStateOf(false) }
@@ -279,7 +280,7 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                         }
                         QuickAction(
                             stringResource(R.string.ui_d6fe3d8e), Icons.Outlined.MoreHoriz,
-                            Modifier.weight(1f).then(focus.track(page, "qam")).semantics { contentDescription = stringResource(R.string.ui_f11f1682) },
+                            Modifier.weight(1f).then(focus.track(page, "qam")).semantics { contentDescription = qamDesc },
                             compact = short,
                             interactionSource = qamInteraction,
                             onConfirm = { host.open = null; a.onQam.invoke() },
@@ -521,9 +522,10 @@ private fun StopSessionButton(modifier: Modifier = Modifier, onClick: () -> Unit
     val hot = src.collectIsFocusedAsState().value || src.collectIsHoveredAsState().value
     val fill by animateColorAsState(if (hot) colors.error.copy(alpha = 0.18f) else Color.Transparent, Motion.tw(220), label = "dangerFill")
     val shape = RoundedCornerShape(20.dp)
+    val dangerDesc = stringResource(R.string.ui_51a72359)
     Row(
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
-        modifier = modifier.heightIn(min = 44.dp).semantics { contentDescription = stringResource(R.string.ui_51a72359) }
+        modifier = modifier.heightIn(min = 44.dp).semantics { contentDescription = dangerDesc }
             .clip(shape).background(fill).border(if (hot) 2.dp else 1.dp, colors.error.copy(alpha = if (hot) 0.9f else 0.55f), shape)
             .hoverable(src).clickable(interactionSource = src, indication = LocalIndication.current, onClick = onClick)
             .controllerConfirm(onClick = onClick)
