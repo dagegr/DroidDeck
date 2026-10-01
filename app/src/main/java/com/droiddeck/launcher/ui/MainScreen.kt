@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -29,13 +31,13 @@ fun ChooseAppDisplayDialog(
         text = {
             Text(
                 secondaryDisplay?.let { "Choose a screen. Secondary: ${it.label}." }
-                    ?: "The secondary display is no longer available.",
+                    ?: stringResource(R.string.ui_a7cf306f),
             )
         },
-        confirmButton = { TextButton(onClick = onPrimary) { Text("Primary screen") } },
+        confirmButton = { TextButton(onClick = onPrimary) { Text(stringResource(R.string.ui_fe42a54d)) } },
         dismissButton = {
             TextButton(onClick = onSecondary, enabled = secondaryDisplay != null) {
-                Text("Secondary screen")
+                Text(stringResource(R.string.ui_f69cb2b7))
             }
         },
     )
@@ -48,7 +50,7 @@ fun ConfirmDialog(title: String, text: String, confirm: String, onConfirm: () ->
         title = { Text(title) },
         text = { Text(text) },
         confirmButton = { TextButton(onClick = { onDismiss(); onConfirm() }) { Text(confirm) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_77dfd213)) } },
     )
 }
 
@@ -56,20 +58,20 @@ fun ConfirmDialog(title: String, text: String, confirm: String, onConfirm: () ->
 fun CreditsDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Credits") },
+        title = { Text(stringResource(R.string.ui_bfac50d6)) },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Text("The412Banner: app, compositor, runtime, and Steam session.", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.ui_68e54bf7), style = MaterialTheme.typography.bodyMedium)
                 Spacer(Modifier.height(10.dp))
-                Text("maxjivi05: gamescope runtime and controller support, based on WinNative.", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.ui_5fbe5d34), style = MaterialTheme.typography.bodyMedium)
                 Spacer(Modifier.height(10.dp))
                 Text(
-                    "GPL-3.0. Steam, Steam Deck, and Proton are Valve trademarks. Not affiliated with Valve. Third-party software remains under its authors' licenses.",
+                    stringResource(R.string.ui_ddd71061),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("OK") } },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_9ce3bd42)) } },
     )
 }
