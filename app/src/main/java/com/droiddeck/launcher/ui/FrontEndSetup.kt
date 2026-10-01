@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.FocusRequester
 import android.os.Build
@@ -104,9 +106,9 @@ private fun CheckRow(state: CheckState, title: String, detail: String?, divider:
                     CheckState.BUSY -> Icons.Filled.Refresh
                 },
                 contentDescription = when (state) {
-                    CheckState.OK -> "Done"
-                    CheckState.WARN -> "Needs attention"
-                    CheckState.BUSY -> "Working"
+                    CheckState.OK -> stringResource(R.string.ui_e9b450d1)
+                    CheckState.WARN -> stringResource(R.string.ui_a126722e)
+                    CheckState.BUSY -> stringResource(R.string.ui_3b4dfc97)
                 },
                 tint = tint, modifier = Modifier.size(16.dp),
             )
@@ -138,16 +140,16 @@ internal fun SetupPanel(
             if (error == null) {
                 a.onRefreshPhantomStatus()
             } else {
-                processLimitMessage = "Check the Wireless debugging IP address & Port, or pair again if Android removed this device."
+                processLimitMessage = stringResource(R.string.ui_78304579)
                 onRequestWirelessAdb(enabled)
             }
         }
     }
     val runtime = when {
-        s.busy -> "Working…"
-        !s.ready -> "Install"
-        s.available != null && s.available != s.installed -> "Update"
-        else -> "Manage"
+        s.busy -> stringResource(R.string.ui_13b7bfca)
+        !s.ready -> stringResource(R.string.ui_fd6c3ebf)
+        s.available != null && s.available != s.installed -> stringResource(R.string.ui_fb91e24f)
+        else -> stringResource(R.string.ui_bf58d17e)
     }
     val colors = MaterialTheme.colorScheme
     val pal = LocalPalette.current
@@ -159,7 +161,7 @@ internal fun SetupPanel(
     val checks = 4
     val readyCount = listOf(gpuOk, s.ready && !s.busy, !limitBlocks, signedIn).count { it }
     // Five tabs instead of one long scroll; LB and RB turn them from anywhere on the page.
-    val tabs = listOf("Overview", "Controller", "Session", "Launcher", "About")
+    val tabs = listOf(stringResource(R.string.ui_0efc2e6b), stringResource(R.string.ui_a36a5ffa), stringResource(R.string.ui_f7f1997c), stringResource(R.string.ui_2aeb5660), stringResource(R.string.ui_6b21fb79))
     var tab by rememberSaveable { mutableStateOf(0) }
     val tabFocus = remember { List(tabs.size) { FocusRequester() } }
     var tabTurned by remember { mutableStateOf(false) }
@@ -179,45 +181,45 @@ internal fun SetupPanel(
                 onNext = { pick((tab + 1) % tabs.size) },
             ),
         ) {
-            PageHeader("Setup") {
+            PageHeader(stringResource(R.string.ui_cdd7bb28)) {
                 Chip(if (readyCount == checks) "● All set" else "$readyCount of $checks ready", ok = readyCount == checks)
             }
             TabStrip(tabs, tab, pick, Modifier.padding(bottom = 4.dp), tabFocus)
             Column(modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
                 when (tab) {
                     0 -> {
-                        SectionTitle("System check", null)
+                        SectionTitle(stringResource(R.string.ui_b46eb13a), null)
                         // What Steam needs, one row each: green when done, one button when not. The
                         // process-limit controls only open under their row.
                         Column(modifier = Modifier.fillMaxWidth().clip(Shape14).background(colors.surface).border(1.dp, pal.line, Shape14)) {
                             CheckRow(
                                 if (gpuOk) CheckState.OK else CheckState.WARN,
-                                if (gpuOk) "Device supported" else "GPU not supported",
+                                if (gpuOk) stringResource(R.string.ui_80dd69b3) else stringResource(R.string.ui_9ec9f237),
                                 if (gpuOk) gpuName else "Steam draws with an Adreno driver; $gpuName may show a black screen",
                             )
                             CheckRow(
                                 when { s.busy -> CheckState.BUSY; !s.ready -> CheckState.WARN; else -> CheckState.OK },
-                                "Linux runtime",
+                                stringResource(R.string.ui_e6b8b545),
                                 when {
                                     s.busy -> if (s.percent >= 0) "${s.stage} · ${s.percent}%" else s.stage
-                                    !s.ready -> "Not installed · about 3 GB, installed on the first Play"
+                                    !s.ready -> stringResource(R.string.ui_0ac7b152)
                                     s.available != null && s.available != s.installed -> "${s.installed ?: "Installed"} · update available"
                                     else -> "${s.installed ?: "Installed"} · up to date"
                                 },
                             ) { SecondaryButton(runtime, enabled = !s.busy, compact = true, onClick = a.onRuntime) }
                             CheckRow(
                                 if (limitBlocks) CheckState.WARN else CheckState.OK,
-                                "Child-process limit",
+                                stringResource(R.string.ui_393f18ef),
                                 when (s.phantomProcessStatus) {
-                                    PhantomProcessStatus.ENABLED -> "On · Android may close Steam. Turning it off takes a minute"
-                                    PhantomProcessStatus.UNSET -> "Not set · the ROM default may close Steam. Turning it off takes a minute"
-                                    PhantomProcessStatus.UNREADABLE -> "Could not be checked · turning it off takes a minute"
+                                    PhantomProcessStatus.ENABLED -> stringResource(R.string.ui_1d81fb78)
+                                    PhantomProcessStatus.UNSET -> stringResource(R.string.ui_5ef2b4c6)
+                                    PhantomProcessStatus.UNREADABLE -> stringResource(R.string.ui_c0cbb6cd)
                                     else -> PhantomProcessLimit.title(s.phantomProcessStatus)
                                 },
                             ) {
-                                if (limitBlocks) PrimaryButton(if (showLimitDetails) "Hide" else "Fix it", compact = true) { showLimitDetails = !showLimitDetails }
+                                if (limitBlocks) PrimaryButton(if (showLimitDetails) stringResource(R.string.ui_34d8b60f) else stringResource(R.string.ui_4c45f9d8), compact = true) { showLimitDetails = !showLimitDetails }
                                 else if (s.phantomProcessStatus != PhantomProcessStatus.NOT_APPLICABLE) {
-                                    SecondaryButton(if (showLimitDetails) "Hide" else "Details", compact = true) { showLimitDetails = !showLimitDetails }
+                                    SecondaryButton(if (showLimitDetails) stringResource(R.string.ui_34d8b60f) else stringResource(R.string.ui_dc3decbb), compact = true) { showLimitDetails = !showLimitDetails }
                                 }
                             }
                             AnimatedVisibility(showLimitDetails, enter = expandVertically() + fadeIn(), exit = shrinkVertically() + fadeOut()) {
@@ -231,11 +233,11 @@ internal fun SetupPanel(
                                     )
                                     Actions {
                                         if (limitBlocks) {
-                                            PrimaryButton("Developer options", compact = true, onClick = onOpenDeveloperOptions)
-                                            SecondaryButton("Use Wireless debugging", compact = true, enabled = !processLimitBusy) { setProcessLimit(false) }
-                                            SecondaryButton("Check again", compact = true, onClick = a.onRefreshPhantomStatus)
+                                            PrimaryButton(stringResource(R.string.ui_7ea27f6f), compact = true, onClick = onOpenDeveloperOptions)
+                                            SecondaryButton(stringResource(R.string.ui_7c156b68), compact = true, enabled = !processLimitBusy) { setProcessLimit(false) }
+                                            SecondaryButton(stringResource(R.string.ui_e185048c), compact = true, onClick = a.onRefreshPhantomStatus)
                                         } else if (s.phantomProcessStatus == PhantomProcessStatus.DISABLED) {
-                                            SecondaryButton("Turn limit on", compact = true, enabled = !processLimitBusy) { setProcessLimit(true) }
+                                            SecondaryButton(stringResource(R.string.ui_2799d688), compact = true, enabled = !processLimitBusy) { setProcessLimit(true) }
                                         }
                                     }
                                     if (processLimitBusy) LinearProgressIndicator(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp))
@@ -244,51 +246,51 @@ internal fun SetupPanel(
                             }
                             CheckRow(
                                 if (signedIn) CheckState.OK else CheckState.WARN,
-                                "Steam account",
+                                stringResource(R.string.ui_247173c9),
                                 s.offlineAccount?.let { if (s.offline) "Signed in as $it · offline mode" else "Signed in as $it" } ?: "Press Play and sign in to Steam",
                                 divider = false,
                             )
                         }
-                        SectionTitle("Tools", null)
+                        SectionTitle(stringResource(R.string.ui_4fa8cc86), null)
                         ToolGrid(s, a)
                     }
                     1 -> {
                         val controller = s.controller
-                        if (controller != null && a.controller != null) SettingsGroup("Controller") {
+                        if (controller != null && a.controller != null) SettingsGroup(stringResource(R.string.ui_a36a5ffa)) {
                             ControllerRows(host, s.oscMode, controller, a.controller)
                         }
-                        if (s.controller == null || a.controller == null) Note("Controller settings are unavailable.")
+                        if (s.controller == null || a.controller == null) Note(stringResource(R.string.ui_9b8dc282))
                     }
                     2 -> {
-                        SettingsGroup("Session") {
+                        SettingsGroup(stringResource(R.string.ui_f7f1997c)) {
                             ChoiceRow(
-                                host, "back-actions", "Back", SessionPrefs.backActionsOrder(s.backActionsInverted),
+                                host, "back-actions", stringResource(R.string.ui_b52b36b7), SessionPrefs.backActionsOrder(s.backActionsInverted),
                                 listOf(
                                     false to SessionPrefs.BACK_MENU_THEN_QAM,
                                     true to SessionPrefs.BACK_QAM_THEN_MENU,
                                 ), s.backActionsInverted, onPick = a.onBackActionsInverted,
                             )
-                            SettingsRow("Frame generation", "Select the frame generation mode") {
+                            SettingsRow(stringResource(R.string.ui_fb701b84), stringResource(R.string.ui_fce37451)) {
                                 Box {
                                     ValueChip(s.frameGenLabel, host.open == "fg") { host.open = if (host.open == "fg") null else "fg" }
                                     FrameGenMenu(s, a, host)
                                 }
                             }
-                            ToggleRow(host, "logs", "Session logs", "Saved after each session", s.logsEnabled) { a.onLogs() }
-                            ActionRow("Latest session logs", "Send them with a bug report", "Share logs", a.onShareLogs)
+                            ToggleRow(host, "logs", stringResource(R.string.ui_5da4aeb8), stringResource(R.string.ui_aec9e69a), s.logsEnabled) { a.onLogs() }
+                            ActionRow(stringResource(R.string.ui_db496f90), stringResource(R.string.ui_a969dcc8), stringResource(R.string.ui_873b2384), a.onShareLogs)
                             ToggleRow(
-                                host, "offline", "Offline mode",
+                                host, "offline", stringResource(R.string.ui_66cf3182),
                                 s.offlineAccount?.let { "Signed in as $it" } ?: "Sign in to Steam first",
                                 s.offline, enabled = s.offlineAccount != null,
                             ) { a.onOffline() }
                         }
                     }
                     3 -> {
-                        SettingsGroup("Launcher") {
-                            SettingsRow("Theme", "Choose the launcher appearance") {
+                        SettingsGroup(stringResource(R.string.ui_2aeb5660)) {
+                            SettingsRow(stringResource(R.string.ui_a797e309), stringResource(R.string.ui_938f7bc7)) {
                                 Box {
                                     ValueChip(Themes.byId(s.theme).label, host.open == "theme") { host.open = if (host.open == "theme") null else "theme" }
-                                    AnchoredMenu(host.open == "theme", onDismiss = { if (host.open == "theme") host.open = null }, title = "Theme") { firstItemFocus ->
+                                    AnchoredMenu(host.open == "theme", onDismiss = { if (host.open == "theme") host.open = null }, title = stringResource(R.string.ui_a797e309)) { firstItemFocus ->
                                         Themes.all.forEachIndexed { index, theme ->
                                             MenuItem(theme.label, checked = s.theme == theme.id, focusRequester = if (index == 0) firstItemFocus else null) {
                                                 a.onTheme(theme.id)
@@ -299,38 +301,38 @@ internal fun SetupPanel(
                                 }
                             }
                             ToggleRow(
-                                host, "home-screen", "Use as a Home screen",
-                                if (s.homeScreenEnabled) "DroidDeck can be the phone's Home app" else "Off: DroidDeck is never offered as a Home app",
+                                host, "home-screen", stringResource(R.string.ui_edb5f0eb),
+                                if (s.homeScreenEnabled) stringResource(R.string.ui_8f849432) else stringResource(R.string.ui_e39b2a7a),
                                 s.homeScreenEnabled,
                             ) { a.onHomeScreen(it) }
                             ToggleRow(
-                                host, "launcher-fullscreen", "Fullscreen",
-                                if (s.launcherFullscreen) "Hide the Android status and navigation bars" else "Show the Android status and navigation bars",
+                                host, "launcher-fullscreen", stringResource(R.string.ui_bb08d10b),
+                                if (s.launcherFullscreen) stringResource(R.string.ui_3034b4a2) else stringResource(R.string.ui_1190f5d1),
                                 s.launcherFullscreen,
                             ) { a.onLauncherFullscreen(it) }
                             if (s.homeScreenEnabled) {
-                                ActionRow("Default Home app", s.defaultHomeLabel ?: "Choose a Home app", "Choose", a.onHomeApp)
+                                ActionRow(stringResource(R.string.ui_747ea02d), s.defaultHomeLabel ?: stringResource(R.string.ui_2ebc5ea0), stringResource(R.string.ui_78b7c9f6), a.onHomeApp)
                             }
                         }
-                        SettingsGroup("Linux apps (beta)") {
+                        SettingsGroup(stringResource(R.string.ui_db925fd5)) {
                             ToggleRow(
-                                host, "store-enabled", "Flathub Store",
+                                host, "store-enabled", stringResource(R.string.ui_7f0466a0),
                                 if (s.storeEnabled) "The Store is in the menu. Some apps may not start; logs are in Download/DroidDeck"
                                 else "Off: install Linux apps and games from Flathub with Flatpak",
                                 s.storeEnabled,
                             ) { a.onStoreEnabled(it) }
                             ToggleRow(
-                                host, "appimages-enabled", "AppImages",
-                                if (s.appImagesEnabled) "Add AppImage is on the Desktop page. ARM64 (aarch64) AppImages only"
+                                host, "appimages-enabled", stringResource(R.string.ui_1a7d0ad6),
+                                if (s.appImagesEnabled) stringResource(R.string.ui_f1540bb1)
                                 else "Off: import ARM64 AppImages from your storage",
                                 s.appImagesEnabled,
                             ) { a.onAppImagesEnabled(it) }
                         }
                     }
                     else -> {
-                        SettingsGroup("About") {
-                            ActionRow("Build", s.buildLabel, "Check for newer", a.onCheckLatestBuild)
-                            ActionRow("Credits", "The people and projects DroidDeck builds on", "View", a.onCredits)
+                        SettingsGroup(stringResource(R.string.ui_6b21fb79)) {
+                            ActionRow("Build", s.buildLabel, stringResource(R.string.ui_10c2f984), a.onCheckLatestBuild)
+                            ActionRow(stringResource(R.string.ui_bfac50d6), stringResource(R.string.ui_e5cb0c91), "View", a.onCredits)
                         }
                     }
                 }
@@ -344,10 +346,10 @@ internal fun SetupPanel(
 private fun ToolGrid(s: FrontEndState, a: FrontEndActions) {
     val columns = if (LocalNarrowPane.current) 2 else 4
     val tools = listOf(
-        ToolSpec(Icons.Outlined.Folder, "Files", "Browse and manage files", a.onFiles),
-        ToolSpec(Icons.Outlined.Extension, "Proton versions", "Install ARM64 Proton builds", a.onProtons),
-        ToolSpec(Icons.Outlined.Speed, "Performance", "CPU core assignment", a.onPerformance),
-        ToolSpec(Icons.Outlined.VideogameAsset, "ROMs folder", s.romsDir ?: "Choose where emulator games are stored", a.onRoms),
+        ToolSpec(Icons.Outlined.Folder, stringResource(R.string.ui_6ce6c512), stringResource(R.string.ui_81a1949d), a.onFiles),
+        ToolSpec(Icons.Outlined.Extension, stringResource(R.string.ui_4541a5ea), stringResource(R.string.ui_26d27890), a.onProtons),
+        ToolSpec(Icons.Outlined.Speed, stringResource(R.string.ui_63c90455), "CPU core assignment", a.onPerformance),
+        ToolSpec(Icons.Outlined.VideogameAsset, stringResource(R.string.ui_8ecf29be), s.romsDir ?: stringResource(R.string.ui_5fb1512a), a.onRoms),
     )
     Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
         for (row in tools.chunked(columns)) {
@@ -401,16 +403,16 @@ internal fun LaunchSettings(s: FrontEndState, a: FrontEndActions, host: MenuHost
     val columns = if (LocalNarrowPane.current) 2 else 3
     val controller = a.controller
     val cards = buildList<@Composable (Modifier) -> Unit> {
-        add { m -> SettingCard("Components", "FEX, DXVK, VKD3D", "card:components", m) { a.onComponents(true) } }
+        add { m -> SettingCard(stringResource(R.string.ui_9289473e), "FEX, DXVK, VKD3D", "card:components", m) { a.onComponents(true) } }
         add { m ->
             Box(m) {
-                SettingCard("Frame generation", s.frameGenLabel, "card:fg", Modifier.fillMaxSize()) {
+                SettingCard(stringResource(R.string.ui_fb701b84), s.frameGenLabel, "card:fg", Modifier.fillMaxSize()) {
                     host.open = if (host.open == "fg") null else "fg"
                 }
                 FrameGenMenu(s, a, host)
             }
         }
-        if (controller != null) add { m -> SettingCard("Controls", "Button mapping", "card:controls", m, controller.onMapping) }
+        if (controller != null) add { m -> SettingCard(stringResource(R.string.ui_bee75ca7), "Button mapping", "card:controls", m, controller.onMapping) }
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
         for (row in cards.chunked(columns)) {
