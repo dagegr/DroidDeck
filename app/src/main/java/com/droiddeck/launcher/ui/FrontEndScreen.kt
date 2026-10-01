@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import java.io.File
 
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -457,7 +459,7 @@ private fun FrontEndScreenBody(s: FrontEndState, a: FrontEndActions, page: (@Com
                 ) {
                     val onGame = frontFocus.focusedRail == null && frontFocus.last?.startsWith("game:") == true
                     ControllerHints(
-                        select = if (onGame) "Launch" else "Select",
+                        select = if (onGame) stringResource(R.string.ui_4ad48a02) else stringResource(R.string.ui_85982229),
                         tabs = railSelection == "setup" && s.pageKey == null && frontFocus.focusedRail == null,
                     )
                 }
@@ -511,7 +513,7 @@ private fun FrontEndScreenBody(s: FrontEndState, a: FrontEndActions, page: (@Com
         if (showDeveloperDisplayChoice) {
             DeveloperDisplayChoiceDialog(
                 displays = s.secondScreenDisplays.map { display ->
-                    display.id to if (s.secondScreenDisplays.size == 1) "Bottom screen" else display.label
+                    display.id to if (s.secondScreenDisplays.size == 1) stringResource(R.string.ui_5faeb6be) else display.label
                 },
                 onMainScreen = {
                     showDeveloperDisplayChoice = false
