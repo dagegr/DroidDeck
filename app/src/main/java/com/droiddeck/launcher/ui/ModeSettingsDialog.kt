@@ -478,7 +478,7 @@ private fun CustomResolutionDialog(initial: Pair<Int, Int>?, onSave: (Pair<Int, 
     val parsed = SessionPrefs.parseResolution("${w}x$h")
     androidx.compose.material3.AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Custom resolution") },
+        title = { Text(stringResource(R.string.ui_1c2099ee)) },
         text = {
             androidx.compose.foundation.layout.Column {
                 Text(
@@ -491,12 +491,12 @@ private fun CustomResolutionDialog(initial: Pair<Int, Int>?, onSave: (Pair<Int, 
                 ) {
                     val numbers = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number)
                     androidx.compose.material3.OutlinedTextField(
-                        w, { v -> w = v.filter(Char::isDigit).take(4) }, label = { Text("Width") },
+                        w, { v -> w = v.filter(Char::isDigit).take(4) }, label = { Text(stringResource(R.string.ui_a58ddf50)) },
                         singleLine = true, keyboardOptions = numbers, modifier = Modifier.weight(1f),
                     )
                     Text("×", fontSize = 18.sp, modifier = Modifier.padding(horizontal = 10.dp))
                     androidx.compose.material3.OutlinedTextField(
-                        h, { v -> h = v.filter(Char::isDigit).take(4) }, label = { Text("Height") },
+                        h, { v -> h = v.filter(Char::isDigit).take(4) }, label = { Text(stringResource(R.string.ui_3f608b49)) },
                         singleLine = true, keyboardOptions = numbers, modifier = Modifier.weight(1f),
                     )
                 }
@@ -517,7 +517,7 @@ private fun CustomResolutionDialog(initial: Pair<Int, Int>?, onSave: (Pair<Int, 
                 )
             }
         },
-        confirmButton = { androidx.compose.material3.TextButton(enabled = parsed != null, onClick = { parsed?.let(onSave) }) { Text("Use") } },
-        dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { androidx.compose.material3.TextButton(enabled = parsed != null, onClick = { parsed?.let(onSave) }) { Text(stringResource(R.string.ui_1d4d43cc)) } },
+        dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_77dfd213)) } },
     )
 }
