@@ -205,7 +205,7 @@
     <string name="ui_8d278823">Installing…</string>
     <string name="ui_8ecf29be">ROMs folder</string>
     <string name="ui_8f0625a3">No apps yet. Find some under Discover or Search.</string>
-    <string name="ui_8f849432">DroidDeck can be the phone's Home app</string>
+    <string name="ui_8f849432">DroidDeck can be the phone\'s Home app</string>
     <string name="ui_926fc514">Starting Steam</string>
     <string name="ui_9289473e">Components</string>
     <string name="ui_938f7bc7">Choose the launcher appearance</string>
@@ -223,7 +223,7 @@
     <string name="ui_a126722e">Needs attention</string>
     <string name="ui_a36a5ffa">Controller</string>
     <string name="ui_a479c9c3">Download</string>
-    <string name="ui_a73da3e0">Flathub's page for this app could not be loaded.</string>
+    <string name="ui_a73da3e0">Flathub\'s page for this app could not be loaded.</string>
     <string name="ui_a797e309">Theme</string>
     <string name="ui_a7cf306f">The secondary display is no longer available.</string>
     <string name="ui_a8af65a8">Stop session?</string>
@@ -248,7 +248,7 @@
     <string name="ui_bf58d17e">Manage</string>
     <string name="ui_bfac50d6">Credits</string>
     <string name="ui_c0cbb6cd">Could not be checked · turning it off takes a minute</string>
-    <string name="ui_c25eb88d">Add an ARM64 (aarch64) AppImage from your storage. It is unpacked into the Linux runtime once, then opens full screen from here or from the desktop's menu.</string>
+    <string name="ui_c25eb88d">Add an ARM64 (aarch64) AppImage from your storage. It is unpacked into the Linux runtime once, then opens full screen from here or from the desktop\'s menu.</string>
     <string name="ui_c5fe78ae">The session ended</string>
     <string name="ui_c614ba7c">Auto</string>
     <string name="ui_c7f73bb5">Settings</string>
@@ -272,7 +272,7 @@
     <string name="ui_db925fd5">Linux apps (beta)</string>
     <string name="ui_dc3decbb">Details</string>
     <string name="ui_dc817ba5">Flathub could not be reached. Check the connection and open the Store again.</string>
-    <string name="ui_ddd71061">GPL-3.0. Steam, Steam Deck, and Proton are Valve trademarks. Not affiliated with Valve. Third-party software remains under its authors' licenses.</string>
+    <string name="ui_ddd71061">GPL-3.0. Steam, Steam Deck, and Proton are Valve trademarks. Not affiliated with Valve. Third-party software remains under its authors\' licenses.</string>
     <string name="ui_de79ad92">Steam menu</string>
     <string name="ui_ded63f8f">Pending from an earlier request</string>
     <string name="ui_df41f19d">No game is running on a Proton</string>
@@ -284,7 +284,7 @@
     <string name="ui_e78eb0e4">Install the Linux runtime from Setup before managing compatibility tools.</string>
     <string name="ui_e963907d">Remove</string>
     <string name="ui_e9b450d1">Done</string>
-    <string name="ui_eb36e2b1">Send this session's logs with a bug report</string>
+    <string name="ui_eb36e2b1">Send this session\'s logs with a bug report</string>
     <string name="ui_ec939f2a">Set up Flatpak first</string>
     <string name="ui_ed2078c3">● Runtime ready</string>
     <string name="ui_ed3f5074">Reading the Protons…</string>
@@ -304,7 +304,7 @@
     <string name="ui_fb91e24f">Update</string>
     <string name="ui_fce37451">Select the frame generation mode</string>
     <string name="ui_fd6c3ebf">Install</string>
-    <string name="ui_fe265f89">Looking for this game's saves…</string>
+    <string name="ui_fe265f89">Looking for this game\'s saves…</string>
     <string name="ui_fe42a54d">Primary screen</string>
     <string name="ui_fe6e41ff">No launchable Android apps found.</string>
     <string name="ui_fed97525">No launchable apps</string>
