@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,37 +35,37 @@ fun ProtonPage(
     val colors = MaterialTheme.colorScheme
     SettingsPage(
         host,
-        title = "Proton versions",
-        eyebrow = "Setup",
-        lede = "Download and install an ARM64 Proton build now, then select it per game in Steam > Properties > Compatibility.",
+        title = stringResource(R.string.ui_4541a5ea),
+        eyebrow = stringResource(R.string.ui_cdd7bb28),
+        lede = stringResource(R.string.ui_f444c0b1),
         onBack = onBack,
     ) {
         if (!runtimeReady) Text(
-            "Install the Linux runtime from Setup before managing compatibility tools.",
+            stringResource(R.string.ui_e78eb0e4),
             fontSize = 12.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp, bottom = 6.dp),
         )
         if (sessionRunning) Text(
-            "Stop the active session before installing or removing a compatibility tool.",
+            stringResource(R.string.ui_87049406),
             fontSize = 12.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp, bottom = 6.dp),
         )
-        SettingsGroup("Available builds") {
+        SettingsGroup(stringResource(R.string.ui_152fee2a)) {
             for (row in rows) {
                 SettingsRow(
                     row.name,
                     when {
                         row.installed != null -> "Installed ${row.installed}"
-                        row.queued -> "Pending from an earlier request"
-                        else -> "Not installed"
+                        row.queued -> stringResource(R.string.ui_ded63f8f)
+                        else -> stringResource(R.string.ui_1aab9f18)
                     },
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         when {
-                            row.installed != null -> SecondaryButton("Remove", enabled = busyId == null && runtimeReady && !sessionRunning) { onRemove(row.id) }
-                            busyId != null -> SecondaryButton(if (busyId == row.id) "Installing…" else "Install", enabled = false) {}
-                            else -> SecondaryButton("Install now", enabled = runtimeReady && !sessionRunning) { onInstall(row.id) }
+                            row.installed != null -> SecondaryButton(stringResource(R.string.ui_e963907d), enabled = busyId == null && runtimeReady && !sessionRunning) { onRemove(row.id) }
+                            busyId != null -> SecondaryButton(if (busyId == row.id) stringResource(R.string.ui_8d278823) else stringResource(R.string.ui_fd6c3ebf), enabled = false) {}
+                            else -> SecondaryButton(stringResource(R.string.ui_8607e4ba), enabled = runtimeReady && !sessionRunning) { onInstall(row.id) }
                         }
                         if (row.queued && row.installed == null && busyId == null) {
-                            SecondaryButton("Cancel queued", enabled = !sessionRunning) { onCancel(row.id) }
+                            SecondaryButton(stringResource(R.string.ui_cf675711), enabled = !sessionRunning) { onCancel(row.id) }
                         }
                     }
                 }
