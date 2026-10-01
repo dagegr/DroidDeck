@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -148,14 +150,14 @@ private fun SetupCard() {
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxWidth().padding(top = 12.dp).clip(Shape16).background(colors.surface).border(1.dp, pal.line, Shape16).padding(16.dp),
     ) {
-        Text("Set up Flatpak", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = colors.onBackground)
+        Text(stringResource(R.string.ui_02e3a831), fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = colors.onBackground)
         Text(
-            "Adds Flatpak to the Linux runtime and connects it to Flathub, about 20 MB. Apps then install " +
+            stringResource(R.string.ui_76d8feb4) +
                 "with the runtimes they need; the first one is the biggest download.",
             fontSize = 14.sp, color = colors.onSurfaceVariant,
         )
         Actions {
-            PrimaryButton(if (busy) "Setting up…" else "Set up Flatpak", enabled = StoreState.busy == null, main = true) { StoreState.setup(ctx) }
+            PrimaryButton(if (busy) stringResource(R.string.ui_cef9b69d) else stringResource(R.string.ui_02e3a831), enabled = StoreState.busy == null, main = true) { StoreState.setup(ctx) }
         }
     }
 }
@@ -188,8 +190,8 @@ private fun Discover(onOpen: (String) -> Unit, onCategory: (String) -> Unit) {
         }
     }
     if (StoreState.sectionsFailed && StoreState.sections.values.all { it.isEmpty() }) {
-        Rise(4) { Note("Flathub could not be reached. Check the connection and open the Store again.") }
-        Actions { SecondaryButton("Try again") { StoreState.loadSections(force = true) } }
+        Rise(4) { Note(stringResource(R.string.ui_dc817ba5)) }
+        Actions { SecondaryButton(stringResource(R.string.ui_042c862e)) { StoreState.loadSections(force = true) } }
         return
     }
     StoreState.SECTIONS.forEachIndexed { i, (key, title) ->
@@ -211,7 +213,7 @@ private fun Search(query: String, category: String?, onQuery: (String) -> Unit, 
     Rise(3) {
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().padding(top = 12.dp)) {
             AdbTextField(
-                value = query, onValueChange = onQuery, label = "Search Flathub", keyboardType = KeyboardType.Text,
+                value = query, onValueChange = onQuery, label = stringResource(R.string.ui_2f018561), keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done, placeholder = "Firefox, games, emulators…", modifier = Modifier.weight(1f), onDone = run,
             )
             PrimaryButton("Search", main = true, onClick = run)
@@ -219,7 +221,7 @@ private fun Search(query: String, category: String?, onQuery: (String) -> Unit, 
     }
     Rise(4) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top = 12.dp, bottom = 4.dp)) {
-            PillButton("All", selected = category == null) { onCategory(null); StoreState.search(query.trim(), null) }
+            PillButton(stringResource(R.string.ui_6a720856), selected = category == null) { onCategory(null); StoreState.search(query.trim(), null) }
             FlathubApi.categories.forEach { c ->
                 PillButton(c.label, selected = category == c.id) { onCategory(c.id); StoreState.search(query.trim(), c.id) }
             }
@@ -228,8 +230,8 @@ private fun Search(query: String, category: String?, onQuery: (String) -> Unit, 
     val results = StoreState.searchResults
     when {
         StoreState.searching -> Rise(5) { SectionTitle("Searching…", null) }
-        results == null -> Rise(5) { Note("Search Flathub by name, or pick a category. Only apps built for ARM64 are listed.") }
-        results.isEmpty() -> Rise(5) { Note("Nothing on Flathub for ARM64 matches that.") }
+        results == null -> Rise(5) { Note(stringResource(R.string.ui_591267af)) }
+        results.isEmpty() -> Rise(5) { Note(stringResource(R.string.ui_f9b33614)) }
         else -> {
             Rise(5) { SectionTitle("Results", results.size.toString()) }
             Rise(6) { AppGrid(results, first = true, onOpen = onOpen) }
@@ -245,7 +247,7 @@ private fun Installed(a: FrontEndActions, onOpen: (String) -> Unit) {
     val apps = StoreState.installed
     Rise(3) {
         Actions {
-            SecondaryButton(if (StoreState.checkingUpdates) "Checking…" else "Check for updates", enabled = StoreState.ready && !StoreState.checkingUpdates && StoreState.busy == null) {
+            SecondaryButton(if (StoreState.checkingUpdates) "Checking…" else stringResource(R.string.ui_736b9062), enabled = StoreState.ready && !StoreState.checkingUpdates && StoreState.busy == null) {
                 StoreState.checkUpdates(ctx)
             }
             if (StoreState.updates.isNotEmpty()) PrimaryButton("Update all (${StoreState.updates.size})", enabled = StoreState.busy == null) {
@@ -254,10 +256,10 @@ private fun Installed(a: FrontEndActions, onOpen: (String) -> Unit) {
         }
     }
     if (apps.isEmpty()) {
-        Rise(4) { Box(Modifier.padding(top = 12.dp)) { Note(if (StoreState.ready) "No apps yet. Find some under Discover or Search." else "Set up Flatpak to install apps.") } }
+        Rise(4) { Box(Modifier.padding(top = 12.dp)) { Note(if (StoreState.ready) stringResource(R.string.ui_8f0625a3) else stringResource(R.string.ui_d7acd2d4)) } }
         return
     }
-    Rise(4) { SectionTitle("Installed", apps.size.toString()) }
+    Rise(4) { SectionTitle(stringResource(R.string.ui_7bb4405c), apps.size.toString()) }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
         apps.forEachIndexed { i, app ->
             key(app.id) {
@@ -274,9 +276,9 @@ private fun Installed(a: FrontEndActions, onOpen: (String) -> Unit) {
                                 fontSize = 13.sp, color = if (app.id in StoreState.updates) pal.signal else colors.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
                             )
                         }
-                        PrimaryButton("Open", compact = true, enabled = !s_busyFor(app.id)) { a.onFlatpakApp(app.id, app.name) }
-                        if (app.id in StoreState.updates) SecondaryButton("Update", compact = true, enabled = StoreState.busy == null) { StoreState.update(ctx, app.id, app.name) }
-                        SecondaryButton("Details", compact = true) { onOpen(app.id) }
+                        PrimaryButton(stringResource(R.string.ui_cf9b7706), compact = true, enabled = !s_busyFor(app.id)) { a.onFlatpakApp(app.id, app.name) }
+                        if (app.id in StoreState.updates) SecondaryButton(stringResource(R.string.ui_fb91e24f), compact = true, enabled = StoreState.busy == null) { StoreState.update(ctx, app.id, app.name) }
+                        SecondaryButton(stringResource(R.string.ui_dc3decbb), compact = true) { onOpen(app.id) }
                     }
                 }
             }
@@ -295,7 +297,7 @@ private fun AppDetail(s: FrontEndState, a: FrontEndActions, id: String, onBack: 
     val d = StoreState.details[id]
     val local = StoreState.installed.firstOrNull { it.id == id }
     val name = d?.name ?: local?.name ?: id
-    Rise(0) { BackLink("Store", onClick = onBack) }
+    Rise(0) { BackLink(stringResource(R.string.ui_0d8a7046), onClick = onBack) }
     Rise(1) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier.padding(top = 12.dp, bottom = 8.dp)) {
             AppIcon(d?.icon ?: local?.icon ?: FlathubApi.iconUrl(id), name, 72)
@@ -315,17 +317,17 @@ private fun AppDetail(s: FrontEndState, a: FrontEndActions, id: String, onBack: 
     Rise(2) {
         Actions {
             if (installed) {
-                PrimaryButton("Open", enabled = !busyHere, main = true) { a.onFlatpakApp(id, name) }
-                if (id in StoreState.updates) SecondaryButton("Update", enabled = StoreState.busy == null) { StoreState.update(ctx, id, name) }
-                SecondaryButton(if (busyHere) "Working…" else if (confirmRemove) "Press again to remove" else "Remove", enabled = StoreState.busy == null) {
+                PrimaryButton(stringResource(R.string.ui_cf9b7706), enabled = !busyHere, main = true) { a.onFlatpakApp(id, name) }
+                if (id in StoreState.updates) SecondaryButton(stringResource(R.string.ui_fb91e24f), enabled = StoreState.busy == null) { StoreState.update(ctx, id, name) }
+                SecondaryButton(if (busyHere) stringResource(R.string.ui_13b7bfca) else if (confirmRemove) stringResource(R.string.ui_d08c5832) else stringResource(R.string.ui_e963907d), enabled = StoreState.busy == null) {
                     if (confirmRemove) { confirmRemove = false; StoreState.uninstall(ctx, id, name) } else confirmRemove = true
                 }
             } else {
                 PrimaryButton(
-                    if (busyHere) "Installing…" else "Install", main = true,
+                    if (busyHere) stringResource(R.string.ui_8d278823) else stringResource(R.string.ui_fd6c3ebf), main = true,
                     enabled = StoreState.ready && StoreState.busy == null && s.ready && (d == null || d.arches.isEmpty() || "aarch64" in d.arches),
                 ) { StoreState.install(ctx, id, name) }
-                if (!StoreState.ready) ActionChip("Set up Flatpak first", ok = false)
+                if (!StoreState.ready) ActionChip(stringResource(R.string.ui_ec939f2a), ok = false)
             }
             d?.version?.let { ActionChip("v$it", ok = false) }
             if (d != null && d.downloadSize > 0) ActionChip("${FileUtils.sizeToString(d.downloadSize)} download", ok = false)
@@ -336,12 +338,12 @@ private fun AppDetail(s: FrontEndState, a: FrontEndActions, id: String, onBack: 
     if (d == null) {
         Rise(3) {
             Box(Modifier.padding(top = 14.dp)) {
-                Note(if (StoreState.detailsFailed[id] == true) "Flathub's page for this app could not be loaded." else "Loading from Flathub…")
+                Note(if (StoreState.detailsFailed[id] == true) stringResource(R.string.ui_a73da3e0) else stringResource(R.string.ui_079e87cf))
             }
         }
         return
     }
-    if (d.arches.isNotEmpty() && "aarch64" !in d.arches) Rise(3) { Box(Modifier.padding(top = 12.dp)) { Note("Flathub has no ARM64 build of this app, so it cannot be installed here.") } }
+    if (d.arches.isNotEmpty() && "aarch64" !in d.arches) Rise(3) { Box(Modifier.padding(top = 12.dp)) { Note(stringResource(R.string.ui_13921557)) } }
     if (d.screenshots.isNotEmpty()) {
         Rise(3) { SectionTitle("Screenshots", null) }
         Rise(3) {
@@ -356,17 +358,17 @@ private fun AppDetail(s: FrontEndState, a: FrontEndActions, id: String, onBack: 
         }
     }
     if (d.description.isNotEmpty()) {
-        Rise(4) { SectionTitle("About", null) }
+        Rise(4) { SectionTitle(stringResource(R.string.ui_6b21fb79), null) }
         Rise(4) { Text(d.description, fontSize = 14.sp, lineHeight = 20.sp, color = colors.onBackground, modifier = Modifier.fillMaxWidth()) }
     }
-    Rise(5) { SectionTitle("Details", null) }
+    Rise(5) { SectionTitle(stringResource(R.string.ui_dc3decbb), null) }
     Rise(5) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.padding(bottom = 16.dp)) {
             listOfNotNull(
-                "App ID" to d.id,
+                stringResource(R.string.ui_c8813428) to d.id,
                 d.license?.let { "License" to it },
                 d.runtime?.let { "Runtime" to it.replace("/x86_64/", "/aarch64/") },
-                if (d.installedSize > 0) "Installed size" to FileUtils.sizeToString(d.installedSize) + " (plus its runtime, shared between apps)" else null,
+                if (d.installedSize > 0) stringResource(R.string.ui_7bf96e0c) to FileUtils.sizeToString(d.installedSize) + " (plus its runtime, shared between apps)" else null,
                 d.homepage?.let { "Website" to it },
             ).forEach { (k, v) ->
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -421,7 +423,7 @@ private fun AppTile(app: FlathubApi.AppSummary, modifier: Modifier, isFirst: Boo
                 Text(app.name, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = colors.onBackground, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
                 if (app.verified) Icon(Icons.Outlined.Verified, contentDescription = "Verified", tint = pal.signal, modifier = Modifier.size(14.dp))
             }
-            Text(if (installed) "Installed" else app.summary, fontSize = 13.sp, color = if (installed) pal.good else colors.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(if (installed) stringResource(R.string.ui_7bb4405c) else app.summary, fontSize = 13.sp, color = if (installed) pal.good else colors.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
     }
 }
@@ -467,7 +469,7 @@ internal fun InstalledAppsGrid(a: FrontEndActions) {
     val pal = LocalPalette.current
     val columns = if (LocalNarrowPane.current) 1 else 3
     Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
-        SectionTitle("Apps from the Store", apps.size.toString())
+        SectionTitle(stringResource(R.string.ui_b591b461), apps.size.toString())
         apps.chunked(columns).forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                 row.forEach { app ->
@@ -509,10 +511,10 @@ internal fun AppImagesSection(a: FrontEndActions, runtimeReady: Boolean) {
     val colors = MaterialTheme.colorScheme
     val pal = LocalPalette.current
     Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
-        SectionTitle("AppImages", state.items.size.takeIf { it > 0 }?.toString())
+        SectionTitle(stringResource(R.string.ui_1a7d0ad6), state.items.size.takeIf { it > 0 }?.toString())
         Actions {
-            SecondaryButton(if (state.importing != null) "Importing…" else "Add AppImage", enabled = runtimeReady && state.importing == null) { a.onImportAppImage() }
-            if (!runtimeReady) ActionChip("Runtime required", ok = false)
+            SecondaryButton(if (state.importing != null) "Importing…" else stringResource(R.string.ui_6ea7f73f), enabled = runtimeReady && state.importing == null) { a.onImportAppImage() }
+            if (!runtimeReady) ActionChip(stringResource(R.string.ui_d5d9a1cf), ok = false)
         }
         state.importing?.let { name ->
             Text("$name · ${state.stage ?: "Starting…"}", fontSize = 12.sp, color = colors.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -520,7 +522,7 @@ internal fun AppImagesSection(a: FrontEndActions, runtimeReady: Boolean) {
         }
         state.lastError?.let { Note(it) }
         if (state.items.isEmpty() && state.importing == null && state.lastError == null) {
-            Note("Add an ARM64 (aarch64) AppImage from your storage. It is unpacked into the Linux runtime once, then opens full screen from here or from the desktop's menu.")
+            Note(stringResource(R.string.ui_c25eb88d))
         }
         state.items.forEach { item ->
             key(item.id) {
@@ -546,7 +548,7 @@ internal fun AppImagesSection(a: FrontEndActions, runtimeReady: Boolean) {
                             Text(item.comment ?: "AppImage", fontSize = 13.sp, color = colors.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
                     }
-                    SecondaryButton(if (confirm) "Press again to remove" else "Remove", compact = true) {
+                    SecondaryButton(if (confirm) stringResource(R.string.ui_d08c5832) else stringResource(R.string.ui_e963907d), compact = true) {
                         if (confirm) { confirm = false; com.droiddeck.launcher.store.AppImageState.remove(ctx, item.id) } else confirm = true
                     }
                 }
