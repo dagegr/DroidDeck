@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -128,7 +130,7 @@ private fun readableStep(step: String): Boolean {
 @Composable
 fun LoadingOverlay(
     step: String, percent: Int, elapsed: String, hint: String, ended: Boolean,
-    title: String = "Starting Steam", steam: Boolean = true, onCancel: (() -> Unit)? = null,
+    title: String = stringResource(R.string.ui_926fc514), steam: Boolean = true, onCancel: (() -> Unit)? = null,
     /** An ended session's exit status and log path, shown small under the advice. */
     endedDetail: String? = null,
     onRetry: (() -> Unit)? = null,
@@ -186,7 +188,7 @@ fun LoadingOverlay(
             }
             Spacer(Modifier.height(30.dp))
             Text(
-                if (ended) "The session ended" else title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold,
+                if (ended) stringResource(R.string.ui_c5fe78ae) else title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold,
                 color = colors.onBackground, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis,
             )
             Text(
@@ -272,13 +274,13 @@ private fun CancelHint(onCancel: () -> Unit, modifier: Modifier = Modifier) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(20.dp).clip(CircleShape).background(colors.onBackground)) {
             Text("B", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = colors.background)
         }
-        Text("Cancel", fontSize = 13.sp, color = colors.onSurfaceVariant)
+        Text(stringResource(R.string.ui_77dfd213), fontSize = 13.sp, color = colors.onSurfaceVariant)
     }
 }
 
 /** A session paused in the background, ready to pick up where it left off. */
 @Composable
-fun SessionPausedOverlay(title: String = "Steam is paused", onResume: () -> Unit) {
+fun SessionPausedOverlay(title: String = stringResource(R.string.ui_0e82136e), onResume: () -> Unit) {
     val colors = MaterialTheme.colorScheme
     val pal = LocalPalette.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -304,7 +306,7 @@ fun SessionPausedOverlay(title: String = "Steam is paused", onResume: () -> Unit
             }
             Text(title, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = colors.onBackground, textAlign = TextAlign.Center)
             PrimaryButton(
-                "Resume",
+                stringResource(R.string.ui_b3bd0b5a),
                 modifier = Modifier.padding(top = 14.dp).focusRequester(resumeFocus).controllerConfirm(onClick = onResume),
                 onClick = onResume,
             )
