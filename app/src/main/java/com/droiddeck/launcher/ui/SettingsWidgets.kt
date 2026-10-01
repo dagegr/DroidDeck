@@ -405,6 +405,7 @@ fun ToggleSwitch(checked: Boolean, enabled: Boolean = true, label: String? = nul
     val edge by animateColorAsState(if (hot) pal.signal else if (checked) pal.signal else pal.line2, Motion.tw(180), label = "switchEdge")
     val knob by animateFloatAsState(if (checked) 1f else 0f, Motion.sp(0.7f), label = "switchKnob")
     val flip = { onChange(!checked) }
+    val checkStateDesc = if (checked) stringResource(R.string.ui_e0049a66) else stringResource(R.string.ui_e3de5ab0)
     val shape = RoundedCornerShape(99.dp)
     // 48dp tall to touch; the visible track sits inside it.
     Box(
@@ -415,7 +416,7 @@ fun ToggleSwitch(checked: Boolean, enabled: Boolean = true, label: String? = nul
             .hoverable(src)
             .clickable(interactionSource = src, indication = null, enabled = enabled, role = Role.Switch, onClick = flip)
             .controllerConfirm(enabled = enabled, onClick = flip)
-            .semantics { stateDescription = if (checked) stringResource(R.string.ui_e0049a66) else stringResource(R.string.ui_e3de5ab0); if (label != null) contentDescription = label },
+            .semantics { stateDescription = checkStateDesc; if (label != null) contentDescription = label },
     ) {
         Box(
             Modifier.size(width = 52.dp, height = 30.dp).clip(shape).background(track)
