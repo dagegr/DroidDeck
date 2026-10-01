@@ -253,7 +253,7 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                     .padding(if (short) 12.dp else 16.dp),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().heightIn(min = if (short) 40.dp else 44.dp)) {
-                    Text(a.title ?: if (a.steam) "Steam" else "Desktop", fontSize = if (short) 18.sp else 20.sp, fontWeight = FontWeight.Bold,
+                    Text(a.title ?: if (a.steam) "Steam" else stringResource(R.string.ui_532c67fe), fontSize = if (short) 18.sp else 20.sp, fontWeight = FontWeight.Bold,
                         color = colors.onBackground, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                     StopSessionButton(modifier = focus.track(page, "stop")) { host.open = null; confirmStop = true }
                 }
@@ -273,13 +273,13 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.fillMaxWidth().padding(top = if (short) 8.dp else 12.dp),
                     ) {
-                        QuickAction("Steam menu", Icons.Outlined.Menu, Modifier.weight(1f).then(focus.track(page, "steam")), compact = short) {
+                        QuickAction(stringResource(R.string.ui_de79ad92), Icons.Outlined.Menu, Modifier.weight(1f).then(focus.track(page, "steam")), compact = short) {
                             host.open = null
                             a.onSteamMenu.invoke()
                         }
                         QuickAction(
-                            "Quick access", Icons.Outlined.MoreHoriz,
-                            Modifier.weight(1f).then(focus.track(page, "qam")).semantics { contentDescription = "Open Quick Access Menu" },
+                            stringResource(R.string.ui_d6fe3d8e), Icons.Outlined.MoreHoriz,
+                            Modifier.weight(1f).then(focus.track(page, "qam")).semantics { contentDescription = stringResource(R.string.ui_f11f1682) },
                             compact = short,
                             interactionSource = qamInteraction,
                             onConfirm = { host.open = null; a.onQam.invoke() },
@@ -291,7 +291,7 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                         // Big Picture's own "Switch to Desktop" waits on SteamOS Manager for ever
                         // here; this does the switch without the client.
                         if (a.onSwitchToDesktop != null) {
-                            QuickAction("Desktop", Icons.Outlined.DesktopWindows, Modifier.weight(1f).then(focus.track(page, "desktop")), compact = short) {
+                            QuickAction(stringResource(R.string.ui_532c67fe), Icons.Outlined.DesktopWindows, Modifier.weight(1f).then(focus.track(page, "desktop")), compact = short) {
                                 host.open = null
                                 a.onSwitchToDesktop.invoke()
                             }
@@ -303,11 +303,11 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth().padding(top = if (short) 6.dp else 12.dp),
                 ) {
-                    DrawerBumper("LB", "Previous page", modifier = focus.track(page, "prev")) {
+                    DrawerBumper("LB", stringResource(R.string.ui_81f54719), modifier = focus.track(page, "prev")) {
                         host.open = null; onPageChange((page + DRAWER_PAGES - 1) % DRAWER_PAGES)
                     }
                     DrawerPageTabs(page = page, compact = short, modifier = Modifier.weight(1f)) { index -> host.open = null; onPageChange(index) }
-                    DrawerBumper("RB", "Next page", modifier = focus.track(page, "next")) {
+                    DrawerBumper("RB", stringResource(R.string.ui_4bfc194b), modifier = focus.track(page, "next")) {
                         host.open = null; onPageChange((page + 1) % DRAWER_PAGES)
                     }
                 }
@@ -315,16 +315,16 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                     modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(pageScroll[page]),
                 ) { CompositionLocalProvider(LocalChipMinWidth provides 120.dp) {
                     when (page) {
-                        0 -> SettingsGroup("Display") {
-                            ToggleRow(host, "hud", "Performance HUD", null, a.hudOn,
+                        0 -> SettingsGroup(stringResource(R.string.ui_574ff9b0)) {
+                            ToggleRow(host, "hud", stringResource(R.string.ui_cb6f3b3b), null, a.hudOn,
                                 chipModifier = focus.track(page, "hud"), onChange = a.onHud)
                             if (a.fillScreen != null) ToggleRow(
-                                host, "fill", "Stretch games to fill", null, a.fillScreen,
+                                host, "fill", stringResource(R.string.ui_0768404c), null, a.fillScreen,
                                 chipModifier = focus.track(page, "fill"), onChange = a.onFillScreen,
                             )
                             val fgOpen = host.open == "fg"
                             val fgLabel = FrameGen.label(a.frameGenEngine, a.frameGenMultiplier)
-                            SettingsRow("Frame generation", null, highlighted = fgOpen) {
+                            SettingsRow(stringResource(R.string.ui_fb701b84), null, highlighted = fgOpen) {
                                 Box {
                                     ValueChip(fgLabel, fgOpen, modifier = focus.track(page, "fg")) { host.open = if (fgOpen) null else "fg" }
                                     FrameGenMenu(host, a.frameGenEngine, a.frameGenMultiplier, a.lsfgReady, a.onFrameGenPick)
@@ -333,49 +333,49 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                         }
                         DRAWER_PAGE_COMPONENTS -> ComponentsDrawerPage(host, a) { key -> focus.track(page, key) }
                         1 -> {
-                            SettingsGroup("Controls") {
+                            SettingsGroup(stringResource(R.string.ui_bee75ca7)) {
                                 ChoiceRow(host, "touch", "Touch", null,
                                     listOf(SessionPrefs.TOUCH_AUTO to "Auto (${a.touchAuto})", SessionPrefs.TOUCH_PAD to "Touchpad", SessionPrefs.TOUCH_DIRECT to "Direct"),
                                     a.touchMode, chipModifier = focus.track(page, "touch"), onPick = a.onTouch)
-                                ChoiceRow(host, "osc", "On-screen controls", null,
-                                    if (a.steam) listOf(SessionPrefs.OSC_AUTO to "Auto", SessionPrefs.OSC_ALWAYS to "Always", SessionPrefs.OSC_STEAM_QAM to "Steam + QAM", SessionPrefs.OSC_NEVER to "Never")
-                                    else listOf(SessionPrefs.OSC_AUTO to "Auto", SessionPrefs.OSC_ALWAYS to "Always", SessionPrefs.OSC_NEVER to "Never"),
+                                ChoiceRow(host, "osc", stringResource(R.string.ui_3388bd75), null,
+                                    if (a.steam) listOf(SessionPrefs.OSC_AUTO to stringResource(R.string.ui_c614ba7c), SessionPrefs.OSC_ALWAYS to stringResource(R.string.ui_a91bcce8), SessionPrefs.OSC_STEAM_QAM to stringResource(R.string.ui_766f3e27), SessionPrefs.OSC_NEVER to stringResource(R.string.ui_80c3052d))
+                                    else listOf(SessionPrefs.OSC_AUTO to stringResource(R.string.ui_c614ba7c), SessionPrefs.OSC_ALWAYS to stringResource(R.string.ui_a91bcce8), SessionPrefs.OSC_NEVER to stringResource(R.string.ui_80c3052d)),
                                     a.oscMode, chipModifier = focus.track(page, "osc"), onPick = a.onOsc)
-                                if (a.steam) ChoiceRow(host, "back-actions", "Back", null,
+                                if (a.steam) ChoiceRow(host, "back-actions", stringResource(R.string.ui_b52b36b7), null,
                                     listOf(false to SessionPrefs.BACK_MENU_THEN_QAM, true to SessionPrefs.BACK_QAM_THEN_MENU),
                                     a.backActionsInverted, chipModifier = focus.track(page, "back-actions"), onPick = a.onBackActionsInverted)
                             }
-                            SettingsGroup("Keyboard") {
+                            SettingsGroup(stringResource(R.string.ui_6662c40b)) {
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                                    DrawerOutlineButton("PC keyboard", modifier = Modifier.weight(1f).height(48.dp).then(focus.track(page, "hardware"))) {
+                                    DrawerOutlineButton(stringResource(R.string.ui_93a0633a), modifier = Modifier.weight(1f).height(48.dp).then(focus.track(page, "hardware"))) {
                                         host.open = null; a.onHardwareKeyboard()
                                     }
-                                    DrawerOutlineButton("Android", modifier = Modifier.weight(1f).height(48.dp).then(focus.track(page, "android"))) {
+                                    DrawerOutlineButton(stringResource(R.string.ui_1928f95c), modifier = Modifier.weight(1f).height(48.dp).then(focus.track(page, "android"))) {
                                         host.open = null; a.onKeyboard()
                                     }
                                 }
                             }
-                            if (a.steam && a.secondScreenDisplays.isNotEmpty()) SettingsGroup("Second screen") {
+                            if (a.steam && a.secondScreenDisplays.isNotEmpty()) SettingsGroup(stringResource(R.string.ui_1fc9e337)) {
                                 ChoiceRow(host, "second-screen-mode", "Shows", null,
                                     (listOf(SecondScreenMode.NONE, SecondScreenMode.KEYBOARD_TRACKPAD, SecondScreenMode.TERMINAL) +
                                         (if (com.droiddeck.launcher.session.SessionState.deckPad) listOf(SecondScreenMode.DECK_CONTROLS) else emptyList()))
                                         .map { it to it.label },
                                     a.secondScreenMode, chipModifier = focus.track(page, "second-screen-mode"), onPick = a.onSecondScreenMode)
-                                if (a.secondScreenDisplays.size > 1) ChoiceRow(host, "second-screen-display", "Display", null,
+                                if (a.secondScreenDisplays.size > 1) ChoiceRow(host, "second-screen-display", stringResource(R.string.ui_574ff9b0), null,
                                     a.secondScreenDisplays.map { it.id to it.label }, a.selectedSecondScreenDisplay,
                                     chipModifier = focus.track(page, "second-screen-display"), onPick = a.onSecondScreenDisplay)
                             }
                         }
                         else -> {
-                            if (a.isHomeApp) SettingsGroup("Android apps") {
-                                SettingsRow("Launch an app", null) {
-                                    DrawerOutlineButton(if (androidAppsExpanded) "Hide" else "Show", modifier = focus.track(page, "apps")) {
+                            if (a.isHomeApp) SettingsGroup(stringResource(R.string.ui_f82faa4e)) {
+                                SettingsRow(stringResource(R.string.ui_9a92693d), null) {
+                                    DrawerOutlineButton(if (androidAppsExpanded) stringResource(R.string.ui_34d8b60f) else stringResource(R.string.ui_d97d1ee3), modifier = focus.track(page, "apps")) {
                                         androidAppsExpanded = !androidAppsExpanded
                                     }
                                 }
                                 if (androidAppsExpanded) {
                                     if (a.androidApps.isEmpty()) {
-                                        Text("No launchable apps", fontSize = 12.sp, color = colors.onSurfaceVariant,
+                                        Text(stringResource(R.string.ui_fed97525), fontSize = 12.sp, color = colors.onSurfaceVariant,
                                             modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp))
                                     } else for (app in a.androidApps) {
                                         MenuItem(
@@ -395,23 +395,23 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                                     }
                                 }
                             }
-                            SettingsGroup("Session behavior") {
+                            SettingsGroup(stringResource(R.string.ui_7398e72a)) {
                                 ChoiceRow(
-                                    host, "suspend", "Background behavior",
-                                    "Applies now and to future sessions in this mode.",
+                                    host, "suspend", stringResource(R.string.ui_139b57f9),
+                                    stringResource(R.string.ui_aa797de2),
                                     listOf(
-                                        SessionPrefs.SUSPEND_AUTO to "Auto",
-                                        SessionPrefs.SUSPEND_MANUAL to "Manual",
-                                        SessionPrefs.SUSPEND_NEVER to "Never",
+                                        SessionPrefs.SUSPEND_AUTO to stringResource(R.string.ui_c614ba7c),
+                                        SessionPrefs.SUSPEND_MANUAL to stringResource(R.string.ui_4e836fdc),
+                                        SessionPrefs.SUSPEND_NEVER to stringResource(R.string.ui_80c3052d),
                                     ),
                                     a.suspendPolicy,
-                                    note = "Auto pauses in the background and resumes when visible. Manual pauses there and waits for Resume. Never keeps the session running.",
+                                    note = stringResource(R.string.ui_40c137f0),
                                     chipModifier = focus.track(page, "suspend"),
                                     onPick = a.onSuspendPolicy,
                                 )
                             }
-                            SettingsGroup("Next session") {
-                                ChoiceRow(host, "shape", "Screen ratio", null,
+                            SettingsGroup(stringResource(R.string.ui_ff7122bb)) {
+                                ChoiceRow(host, "shape", stringResource(R.string.ui_5c28c814), null,
                                     SessionPrefs.shapeChoices, a.shapeMode,
                                     chipModifier = focus.track(page, "shape"), onPick = a.onShape)
                             }
@@ -421,16 +421,16 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                                     chipModifier = focus.track(page, "fex"), onPick = a.onFexPreset)
                                 GameEnvironmentRow(modifier = focus.track(page, "game-env"))
                             }
-                            SettingsGroup("Support") {
-                                SettingsRow("Session logs", "Send this session's logs with a bug report") {
-                                    DrawerOutlineButton("Share logs", modifier = focus.track(page, "share-logs")) {
+                            SettingsGroup(stringResource(R.string.ui_f32d5a3b)) {
+                                SettingsRow(stringResource(R.string.ui_5da4aeb8), stringResource(R.string.ui_eb36e2b1)) {
+                                    DrawerOutlineButton(stringResource(R.string.ui_873b2384), modifier = focus.track(page, "share-logs")) {
                                         host.open = null
                                         a.onShareLogs()
                                     }
                                 }
                             }
                             Spacer(Modifier.height(18.dp))
-                            if (!a.isHomeApp) DrawerOutlineButton("Background", modifier = focus.track(page, "background")) {
+                            if (!a.isHomeApp) DrawerOutlineButton(stringResource(R.string.ui_64dd60fe), modifier = focus.track(page, "background")) {
                                 host.open = null; a.onBackground()
                             }
                         }
@@ -477,7 +477,7 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
         AlertDialog(
             onDismissRequest = cancel,
             modifier = Modifier.controllerBack(onBack = cancel),
-            title = { Text("Stop session?") },
+            title = { Text(stringResource(R.string.ui_a8af65a8)) },
             confirmButton = {
                 val dialogView = LocalView.current
                 TextButton(
@@ -487,11 +487,11 @@ fun SessionDrawer(open: Boolean, page: Int, controllerActive: Boolean, onPageCha
                         stopOnScreen = c.boundsInWindow().translate(at[0].toFloat(), at[1].toFloat())
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = colors.error),
-                ) { Text("Stop") }
+                ) { Text(stringResource(R.string.ui_9e253470)) }
             },
             dismissButton = {
                 TextButton(onClick = cancel, modifier = Modifier.focusRequester(cancelFocus)
-                    .controllerConfirm(onClick = cancel)) { Text("Cancel") }
+                    .controllerConfirm(onClick = cancel)) { Text(stringResource(R.string.ui_77dfd213)) }
             },
         )
     }
@@ -523,14 +523,14 @@ private fun StopSessionButton(modifier: Modifier = Modifier, onClick: () -> Unit
     val shape = RoundedCornerShape(20.dp)
     Row(
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
-        modifier = modifier.heightIn(min = 44.dp).semantics { contentDescription = "Stop session" }
+        modifier = modifier.heightIn(min = 44.dp).semantics { contentDescription = stringResource(R.string.ui_51a72359) }
             .clip(shape).background(fill).border(if (hot) 2.dp else 1.dp, colors.error.copy(alpha = if (hot) 0.9f else 0.55f), shape)
             .hoverable(src).clickable(interactionSource = src, indication = LocalIndication.current, onClick = onClick)
             .controllerConfirm(onClick = onClick)
             .padding(start = 12.dp, end = 14.dp),
     ) {
         Icon(Icons.Outlined.PowerSettingsNew, contentDescription = null, tint = colors.error, modifier = Modifier.size(18.dp))
-        Text("Stop", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = colors.error)
+        Text(stringResource(R.string.ui_9e253470), fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = colors.error)
     }
 }
 
@@ -666,8 +666,8 @@ private fun ComponentsDrawerPage(host: MenuHost, a: DrawerActions, track: (Strin
     val colors = MaterialTheme.colorScheme
     val snap = a.components
     if (snap == null) {
-        SettingsGroup("Components") {
-            Text("Reading the Protons…", fontSize = 13.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(14.dp))
+        SettingsGroup(stringResource(R.string.ui_9289473e)) {
+            Text(stringResource(R.string.ui_ed3f5074), fontSize = 13.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(14.dp))
         }
         return
     }
@@ -675,7 +675,7 @@ private fun ComponentsDrawerPage(host: MenuHost, a: DrawerActions, track: (Strin
     var pick by rememberSaveable { mutableStateOf<String?>(null) }
     val view = snap.protons.firstOrNull { it.proton.id == pick } ?: running.firstOrNull() ?: snap.protons.firstOrNull()
     // Focusable, so the pad can climb from the Proton box up to it and the page scrolls it into view.
-    SettingsGroup("Running now") {
+    SettingsGroup(stringResource(R.string.ui_33cfd5d5)) {
         val src = remember { MutableInteractionSource() }
         val hot = src.collectIsFocusedAsState().value
         val pal = LocalPalette.current
@@ -686,8 +686,8 @@ private fun ComponentsDrawerPage(host: MenuHost, a: DrawerActions, track: (Strin
                 .padding(horizontal = 14.dp, vertical = 11.dp),
         ) {
             if (running.isEmpty()) {
-                Text("No game is running on a Proton", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = colors.onBackground)
-                Text("Changes apply the next time a game starts.", fontSize = 12.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
+                Text(stringResource(R.string.ui_df41f19d), fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = colors.onBackground)
+                Text(stringResource(R.string.ui_13cfb141), fontSize = 12.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
             } else for (r in running) {
                 Text(r.proton.name, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = colors.onBackground, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 for (comp in ComponentsManager.COMPONENTS) {
@@ -700,19 +700,19 @@ private fun ComponentsDrawerPage(host: MenuHost, a: DrawerActions, track: (Strin
         }
     }
     if (view == null) {
-        SettingsGroup("Components") {
-            Text("No Proton is installed yet.", fontSize = 13.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(14.dp))
+        SettingsGroup(stringResource(R.string.ui_9289473e)) {
+            Text(stringResource(R.string.ui_e57f0c48), fontSize = 13.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(14.dp))
         }
         return
     }
     val p = view.proton
-    SettingsGroup("Components") {
+    SettingsGroup(stringResource(R.string.ui_9289473e)) {
         DrawerStackedChoice(
-            host, "cmp-proton", "Proton",
+            host, "cmp-proton", stringResource(R.string.ui_9ff51320),
             listOfNotNull(
                 p.version,
-                "game running".takeIf { view.inUseByGame },
-                view.reappliedAt.takeIf { it > 0 }?.let { "re-applied at launch " + java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(it * 1000)) },
+                stringResource(R.string.ui_5dfc2508).takeIf { view.inUseByGame },
+                view.reappliedAt.takeIf { it > 0 }?.let { stringResource(R.string.ui_696cd4a2) + java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(it * 1000)) },
             ).joinToString(" · "),
             snap.protons.map { it.proton.id to it.proton.name }, p.id,
             chipModifier = track("cmp-proton"), onPick = { pick = it },
@@ -731,14 +731,14 @@ private fun ComponentsDrawerPage(host: MenuHost, a: DrawerActions, track: (Strin
                 // The box already shows the choice: only say more when there is more to say.
                 st.queued?.let { "Next: $it · after the game closes" } ?: st.inUse.takeIf { it != shown },
                 options, current,
-                note = if (view.inUseByGame) "A game is running on this Proton: the change waits until it closes." else "Applies the next time a game starts.",
+                note = if (view.inUseByGame) stringResource(R.string.ui_ff47247e) else stringResource(R.string.ui_26188fc1),
                 chipModifier = track("cmp-$comp"),
                 onPick = { v -> if (v != current || st.queued != null) a.onComponentSwap(p.id, comp, v) },
             )
         }
     }
     Text(
-        "Downloads, importing and deleting are on the Components page in the app.",
+        stringResource(R.string.ui_42fa1010),
         fontSize = 12.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(horizontal = 4.dp, vertical = 12.dp),
     )
 }
