@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import android.view.KeyEvent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -413,7 +415,7 @@ fun ToggleSwitch(checked: Boolean, enabled: Boolean = true, label: String? = nul
             .hoverable(src)
             .clickable(interactionSource = src, indication = null, enabled = enabled, role = Role.Switch, onClick = flip)
             .controllerConfirm(enabled = enabled, onClick = flip)
-            .semantics { stateDescription = if (checked) "On" else "Off"; if (label != null) contentDescription = label },
+            .semantics { stateDescription = if (checked) stringResource(R.string.ui_e0049a66) else stringResource(R.string.ui_e3de5ab0); if (label != null) contentDescription = label },
     ) {
         Box(
             Modifier.size(width = 52.dp, height = 30.dp).clip(shape).background(track)
@@ -438,7 +440,7 @@ fun MultiRow(
     val open = host.open == key
     val summary = when {
         selected.size >= items.size -> "All ${items.size}"
-        selected.isEmpty() -> "None"
+        selected.isEmpty() -> stringResource(R.string.ui_6eef6648)
         else -> "${selected.size} of ${items.size}"
     }
     SettingsRow(label, hint, highlighted = open) {
@@ -492,7 +494,7 @@ fun SettingsPage(
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.padding(bottom = 6.dp),
                 ) {
-                    BackLink("Back", compact = true, onClick = onBack)
+                    BackLink(stringResource(R.string.ui_b52b36b7), compact = true, onClick = onBack)
                     Text(
                         title, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = colors.onBackground,
                         maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f),
@@ -504,7 +506,7 @@ fun SettingsPage(
         } else {
             Rise(0) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    BackLink("Back", compact = compactLayout, onClick = onBack)
+                    BackLink(stringResource(R.string.ui_b52b36b7), compact = compactLayout, onClick = onBack)
                     if (eyebrow != null) {
                         Spacer(Modifier.width(10.dp))
                         Eyebrow(eyebrow)
