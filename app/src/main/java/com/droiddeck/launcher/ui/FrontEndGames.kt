@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -66,10 +68,10 @@ internal fun GamesPage(s: FrontEndState, a: FrontEndActions, selected: String, o
     val current = games.firstOrNull { "app:${it.appId}" == selected } ?: games.firstOrNull()
     if (current == null) {
         Column(modifier = modifier.padding(horizontal = if (narrow) 16.dp else 22.dp, vertical = if (narrow) 12.dp else 18.dp)) {
-            Rise(0) { PageHeader("Games") }
-            Rise(1) { Note("Games you install in Steam show up here. Open Steam, install one, and it appears after the session.") }
+            Rise(0) { PageHeader(stringResource(R.string.ui_398ed329)) }
+            Rise(1) { Note(stringResource(R.string.ui_527b8e47)) }
             Rise(2) {
-                Actions { PrimaryButton("Play Steam", enabled = !s.busy, main = true, icon = Icons.Filled.PlayArrow, modifier = Modifier.padding(top = 12.dp), onClick = a.onPlay) }
+                Actions { PrimaryButton(stringResource(R.string.ui_f3f806a3), enabled = !s.busy, main = true, icon = Icons.Filled.PlayArrow, modifier = Modifier.padding(top = 12.dp), onClick = a.onPlay) }
             }
         }
         return
@@ -86,7 +88,7 @@ internal fun GamesPage(s: FrontEndState, a: FrontEndActions, selected: String, o
                     if (!narrow) Poster(current.art, current.name, Modifier.width(168.dp))
                 }
             }
-            Rise(1) { SectionTitle("Launch settings", null) }
+            Rise(1) { SectionTitle(stringResource(R.string.ui_4187e8f7), null) }
             Rise(2) { LaunchSettings(s, a, host) }
         }
         return
@@ -104,7 +106,7 @@ internal fun GamesPage(s: FrontEndState, a: FrontEndActions, selected: String, o
                 GameHeroCopy(current, if (narrow) 24.sp else 32.sp)
                 GameActions(current, s, a)
             }
-            SectionTitle("Launch settings", null)
+            SectionTitle(stringResource(R.string.ui_4187e8f7), null)
             LaunchSettings(s, a, host)
         }
     }
@@ -114,12 +116,12 @@ internal fun GamesPage(s: FrontEndState, a: FrontEndActions, selected: String, o
 @Composable
 private fun GameActions(g: Library.SteamGame, s: FrontEndState, a: FrontEndActions) {
     Actions {
-        PrimaryButton("Launch", enabled = !s.busy, main = true, icon = Icons.Filled.PlayArrow) { a.onSteamGame(g) }
+        PrimaryButton(stringResource(R.string.ui_4ad48a02), enabled = !s.busy, main = true, icon = Icons.Filled.PlayArrow) { a.onSteamGame(g) }
         g.gameFiles?.takeIf { it.isDirectory }?.let { dir ->
-            SecondaryButton("Game files", compact = true) { a.onBrowseFiles(dir) }
+            SecondaryButton(stringResource(R.string.ui_39e44011), compact = true) { a.onBrowseFiles(dir) }
         }
         g.protonPrefix?.takeIf { it.isDirectory }?.let { dir ->
-            SecondaryButton("Proton prefix", compact = true) { a.onBrowseFiles(dir) }
+            SecondaryButton(stringResource(R.string.ui_1aa0d3cf), compact = true) { a.onBrowseFiles(dir) }
             // Only games added to the library; Steam titles keep their saves with Steam Cloud.
             if (g.library == Library.ADDED) ManageSaves(g, dir, a)
         }
@@ -141,8 +143,8 @@ private fun ManageSaves(g: Library.SteamGame, prefix: java.io.File, a: FrontEndA
     }
     val found = saves
     val summary = when {
-        found == null -> "Looking for this game's saves…"
-        found.isEmpty() -> "No save folder found by name: an export takes the whole user folder."
+        found == null -> stringResource(R.string.ui_fe265f89)
+        found.isEmpty() -> stringResource(R.string.ui_985d30b4)
         else -> {
             val mb = found.sumOf { it.bytes } / 1048576.0
             (if (found.size == 1) found[0].relPath else "${found.size} save folders") + " · ${found.sumOf { it.files }} files · " +
@@ -150,19 +152,19 @@ private fun ManageSaves(g: Library.SteamGame, prefix: java.io.File, a: FrontEndA
         }
     }
     Box {
-        SecondaryButton("Manage saves", compact = true) { open = !open }
-        AnchoredMenu(open, onDismiss = { open = false }, title = "Game saves", note = summary) { first ->
-            MenuItem("Import saves…", checked = false, detail = "A GameHub or Winlator zip · the saves there now are backed up first", focusRequester = first) {
+        SecondaryButton(stringResource(R.string.ui_2ff6ac1b), compact = true) { open = !open }
+        AnchoredMenu(open, onDismiss = { open = false }, title = stringResource(R.string.ui_38d7360c), note = summary) { first ->
+            MenuItem(stringResource(R.string.ui_202f35ef), checked = false, detail = stringResource(R.string.ui_94569b0c), focusRequester = first) {
                 open = false; a.onSaveImport(g)
             }
-            MenuItem("Export as GameHub zip…", checked = false, detail = "Saves under steamuser, for GameHub and BannerHub") {
+            MenuItem(stringResource(R.string.ui_0abfeca5), checked = false, detail = stringResource(R.string.ui_67a092d0)) {
                 open = false; a.onSaveExport(g, com.droiddeck.launcher.session.GameSaves.Layout.GAMEHUB)
             }
-            MenuItem("Export as Winlator zip…", checked = false, detail = "Saves under xuser, for Winlator, WinNative and Bannerlator") {
+            MenuItem(stringResource(R.string.ui_b85a7e4a), checked = false, detail = stringResource(R.string.ui_290539a3)) {
                 open = false; a.onSaveExport(g, com.droiddeck.launcher.session.GameSaves.Layout.WINLATOR)
             }
             found?.firstOrNull()?.let { d ->
-                MenuItem("Open save folder", checked = false, detail = d.relPath) {
+                MenuItem(stringResource(R.string.ui_da2bce10), checked = false, detail = d.relPath) {
                     open = false; a.onBrowseFiles(java.io.File(prefix, "drive_c/users/steamuser/" + d.relPath))
                 }
             }
@@ -197,7 +199,7 @@ private fun GameList(
         modifier = modifier.verticalScroll(rememberScrollState()).padding(start = 12.dp, end = 10.dp, top = 16.dp, bottom = 16.dp),
     ) {
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(start = 6.dp, bottom = 10.dp)) {
-            Text("Games", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = colors.onBackground, maxLines = 1)
+            Text(stringResource(R.string.ui_398ed329), fontSize = 22.sp, fontWeight = FontWeight.Bold, color = colors.onBackground, maxLines = 1)
             Text(games.size.toString(), fontSize = 13.sp, color = colors.onSurfaceVariant, modifier = Modifier.padding(bottom = 3.dp))
         }
         for (g in games) key(g.appId) {
@@ -231,7 +233,7 @@ private fun GameRow(g: Library.SteamGame, selected: Boolean, onSelect: () -> Uni
         Column(modifier = Modifier.weight(1f)) {
             Text(g.name, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = colors.onBackground, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
-                lastPlayedText(g.lastPlayed)?.removePrefix("Last played ")?.replaceFirstChar { it.uppercase() } ?: "Never played",
+                lastPlayedText(g.lastPlayed)?.removePrefix(stringResource(R.string.ui_573a6ccc))?.replaceFirstChar { it.uppercase() } ?: stringResource(R.string.ui_6e46a0f1),
                 fontSize = 12.sp, color = colors.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
         }
@@ -263,9 +265,9 @@ internal fun BusyChip(s: FrontEndState) {
 @Composable
 internal fun RuntimeChip(s: FrontEndState) = when {
     s.busy -> Chip(if (s.percent >= 0) "${s.stage} · ${s.percent}%" else s.stage, ok = false)
-    !s.ready -> Chip("Runtime installs on first Play", ok = false)
-    s.available != null && s.available != s.installed -> Chip("Runtime update available", ok = false)
-    else -> Chip("● Runtime ready", ok = true)
+    !s.ready -> Chip(stringResource(R.string.ui_bde72efc), ok = false)
+    s.available != null && s.available != s.installed -> Chip(stringResource(R.string.ui_36aa29dc), ok = false)
+    else -> Chip(stringResource(R.string.ui_ed2078c3), ok = true)
 }
 
 /** "Last played 3 days ago" from Steam's unix seconds; null for a game never played. */
