@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.files
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import android.widget.Toast
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -66,7 +68,7 @@ internal fun FilePropertiesDialog(
 
     OutlinedAlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Properties") },
+        title = { Text(stringResource(R.string.ui_bc6c88db)) },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 // ── Basic info ──
@@ -141,7 +143,7 @@ internal fun FilePropertiesDialog(
                 )
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("Done") } },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_e9b450d1)) } },
     )
 }
 
