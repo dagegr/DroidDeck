@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -344,8 +346,8 @@ private fun Tag(text: String) {
     val colors = MaterialTheme.colorScheme
     val pal = LocalPalette.current
     val (fg, bg) = when (text) {
-        "ORIGINAL" -> GOLD to Color(0x22F2C66D)
-        "IN USE" -> pal.onSignal to pal.signal
+        stringResource(R.string.ui_05e5aaf0) -> GOLD to Color(0x22F2C66D)
+        stringResource(R.string.ui_621d66d0) -> pal.onSignal to pal.signal
         "NEW" -> pal.good to Color(0x224CD37F)
         else -> colors.onSurfaceVariant to Color.White.copy(alpha = 0.07f)
     }
@@ -387,7 +389,7 @@ private fun InstalledLine(item: InstalledItem, modifier: Modifier = Modifier, on
                 }
                 Text(item.detail, fontSize = 13.sp, color = colors.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 2.dp))
             }
-            if (item.selected) Tag("IN USE")
+            if (item.selected) Tag(stringResource(R.string.ui_621d66d0))
         }
         // The trash column is always there (empty when the row can't be deleted) so rows line up.
         if (!item.removable) Spacer(Modifier.padding(end = 6.dp).size(40.dp))
@@ -422,7 +424,7 @@ private fun AvailableLine(d: CatalogItem, progress: Int?, enabled: Boolean, onDo
                 maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 2.dp),
             )
         }
-        if (progress == null) SmallButton("Download", enabled = enabled, accent = true, onClick = onDownload)
+        if (progress == null) SmallButton(stringResource(R.string.ui_a479c9c3), enabled = enabled, accent = true, onClick = onDownload)
         else Column(horizontalAlignment = Alignment.End, modifier = Modifier.width(96.dp)) {
             Text(if (progress < 0) "…" else "$progress%", fontSize = 13.sp, color = colors.onSurfaceVariant)
             Spacer(Modifier.height(4.dp))
