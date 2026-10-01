@@ -1,5 +1,6 @@
 package com.droiddeck.launcher.files
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -107,7 +108,7 @@ private fun FileContextMenuItems(
 ) {
     val isDir = file.isDirectory
     DropdownMenuItem(
-        text = { Text("Select") },
+        text = { Text(stringResource(R.string.ui_85982229)) },
         leadingIcon = { Icon(Icons.Filled.Checklist, null, tint = MaterialTheme.colorScheme.primary) },
         onClick = { onDismissMenu(); onSelect() },
     )
@@ -115,7 +116,7 @@ private fun FileContextMenuItems(
     // Properties: basic info + Read-only / Hidden toggles, for ANY file or folder (handy for config
     // files like .txt/.cfg/.ini). Kept near the top since it's a common reason to open this menu.
     DropdownMenuItem(
-        text = { Text("Properties") },
+        text = { Text(stringResource(R.string.ui_bc6c88db)) },
         leadingIcon = { Icon(Icons.Filled.Info, null, tint = MaterialTheme.colorScheme.primary) },
         onClick = { onDismissMenu(); onProperties() },
     )
@@ -123,7 +124,7 @@ private fun FileContextMenuItems(
     // Favorites are directories - only folders get the pin toggle.
     if (isDir) {
         DropdownMenuItem(
-            text = { Text(if (isFavorite) "Remove from Favorites" else "Add to Favorites") },
+            text = { Text(if (isFavorite) stringResource(R.string.ui_a0831985) else stringResource(R.string.ui_5dfbd9ba)) },
             leadingIcon = {
                 Icon(
                     if (isFavorite) Icons.Filled.Star else Icons.Filled.StarBorder,
@@ -136,25 +137,25 @@ private fun FileContextMenuItems(
         MenuItemDivider()
     }
     DropdownMenuItem(
-        text = { Text("Rename") },
+        text = { Text(stringResource(R.string.ui_d3f4cb89)) },
         leadingIcon = { Icon(Icons.Filled.Edit, null, tint = MaterialTheme.colorScheme.primary) },
         onClick = { onDismissMenu(); onRename() },
     )
     MenuItemDivider()
     DropdownMenuItem(
-        text = { Text("Copy") },
+        text = { Text(stringResource(R.string.ui_af74f7c5)) },
         leadingIcon = { Icon(Icons.Filled.FileCopy, null, tint = MaterialTheme.colorScheme.primary) },
         onClick = { onDismissMenu(); onCopy() },
     )
     MenuItemDivider()
     DropdownMenuItem(
-        text = { Text("Cut") },
+        text = { Text(stringResource(R.string.ui_38d13bda)) },
         leadingIcon = { Icon(Icons.Filled.ContentCut, null, tint = MaterialTheme.colorScheme.primary) },
         onClick = { onDismissMenu(); onCut() },
     )
     MenuItemDivider()
     DropdownMenuItem(
-        text = { Text("Delete") },
+        text = { Text(stringResource(R.string.ui_f6fdbe48)) },
         leadingIcon = { Icon(Icons.Filled.Delete, null, tint = MaterialTheme.colorScheme.primary) },
         onClick = { onDismissMenu(); onDelete() },
     )
@@ -351,7 +352,7 @@ internal fun FavoritesList(
                     Icon(Icons.Filled.PushPin, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(6.dp))
                     Text(
-                        text = "Pin current folder",
+                        text = stringResource(R.string.ui_68bdaf20),
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 13.sp,
                     )
@@ -366,7 +367,7 @@ internal fun FavoritesList(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "No favorites yet - pin a folder with its ⋮ menu to jump back here fast.",
+                        text = stringResource(R.string.ui_4a1ddec0),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 13.sp,
                         modifier = Modifier.padding(horizontal = 32.dp),
@@ -443,8 +444,8 @@ private fun FavoriteCard(
                     Spacer(Modifier.width(6.dp))
                     Text(
                         text = when (loc.storage) {
-                            FavStorage.INTERNAL -> "Internal storage"
-                            FavStorage.SD -> "SD card"
+                            FavStorage.INTERNAL -> stringResource(R.string.ui_90208b15)
+                            FavStorage.SD -> stringResource(R.string.ui_6a202a21)
                             FavStorage.OTHER -> "Storage"
                         },
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -464,7 +465,7 @@ private fun FavoriteCard(
             IconButton(onClick = onUnpin) {
                 Icon(
                     Icons.Filled.Star,
-                    contentDescription = "Remove from favorites",
+                    contentDescription = stringResource(R.string.ui_b6ddf62b),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(22.dp),
                 )
