@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -36,14 +38,14 @@ private fun Swatch(color: Int) {
 @Composable
 fun ColumnScope.ControllerRows(host: MenuHost, oscMode: String, c: ControllerPrefs.Settings, a: ControllerActions) {
     ChoiceRow(
-        host, "controller-osc", "On-screen controls", "When the touch pad appears in a session",
-        listOf(SessionPrefs.OSC_AUTO to "Auto", SessionPrefs.OSC_ALWAYS to "Always", SessionPrefs.OSC_STEAM_QAM to "Steam + QAM", SessionPrefs.OSC_NEVER to "Never"),
+        host, "controller-osc", stringResource(R.string.ui_3388bd75), "When the touch pad appears in a session",
+        listOf(SessionPrefs.OSC_AUTO to stringResource(R.string.ui_c614ba7c), SessionPrefs.OSC_ALWAYS to stringResource(R.string.ui_a91bcce8), SessionPrefs.OSC_STEAM_QAM to stringResource(R.string.ui_766f3e27), SessionPrefs.OSC_NEVER to stringResource(R.string.ui_80c3052d)),
         oscMode, note = "Auto shows all controls without a controller. Steam + QAM shows only those buttons.", onPick = a.onOsc,
     )
     val tintOpen = host.open == "controller-tint"
-    SettingsRow("Color", "Tint of the on-screen buttons", highlighted = tintOpen) {
+    SettingsRow("Color", stringResource(R.string.ui_b33a2587), highlighted = tintOpen) {
         Box {
-            ValueChip(ControllerPrefs.tints.firstOrNull { it.first == c.tint }?.second ?: "Custom", tintOpen) {
+            ValueChip(ControllerPrefs.tints.firstOrNull { it.first == c.tint }?.second ?: stringResource(R.string.ui_081ae3fd), tintOpen) {
                 host.open = if (tintOpen) null else "controller-tint"
             }
             AnchoredMenu(tintOpen, onDismiss = { if (host.open == "controller-tint") host.open = null }, title = "Color") { firstItemFocus ->
@@ -58,34 +60,34 @@ fun ColumnScope.ControllerRows(host: MenuHost, oscMode: String, c: ControllerPre
     }
     ChoiceRow(host, "controller-opacity", "Opacity", null, ControllerPrefs.opacities.map { it to "$it%" }, c.opacity, onPick = a.onOpacity)
     ChoiceRow(host, "controller-size", "Button size", "100% keeps the standard size", ControllerPrefs.sizes.map { it to "$it%" }, c.size, onPick = a.onSize)
-    ToggleRow(host, "controller-stick-click", "Stick click", "Double-tap a stick and hold for L3 or R3", c.stickClick, onChange = a.onStickClick)
-    ToggleRow(host, "controller-adaptive", "Adaptive sticks", "Sticks appear when touched near their saved positions and hide when released", c.adaptiveSticks, onChange = a.onAdaptiveSticks)
-    SettingsRow("Layout", if (c.customLayout) "Custom positions saved" else "Placed for this screen's size and your grip") {
+    ToggleRow(host, "controller-stick-click", stringResource(R.string.ui_637450c3), stringResource(R.string.ui_8346b066), c.stickClick, onChange = a.onStickClick)
+    ToggleRow(host, "controller-adaptive", stringResource(R.string.ui_ebc087e5), "Sticks appear when touched near their saved positions and hide when released", c.adaptiveSticks, onChange = a.onAdaptiveSticks)
+    SettingsRow("Layout", if (c.customLayout) stringResource(R.string.ui_3845db31) else "Placed for this screen's size and your grip") {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            SecondaryButton("Edit") { a.onEditLayout() }
-            SecondaryButton("Reset", enabled = c.customLayout) { a.onResetLayout() }
+            SecondaryButton(stringResource(R.string.ui_5301648d)) { a.onEditLayout() }
+            SecondaryButton(stringResource(R.string.ui_44c57abd), enabled = c.customLayout) { a.onResetLayout() }
         }
     }
     val remapped = c.mapping.count { (id, target) -> id != target }
     ActionRow("Button mapping", if (remapped == 0) "Every button sends its own input" else "$remapped of ${c.mapping.size} buttons remapped", "Configure", a.onMapping)
-    ActionRow("Reset controller", "Restore the default color, opacity, size, stick behavior, mapping and layout", "Reset", a.onResetAll)
+    ActionRow(stringResource(R.string.ui_1a2afc49), "Restore the default color, opacity, size, stick behavior, mapping and layout", stringResource(R.string.ui_44c57abd), a.onResetAll)
 }
 
 @Composable
 fun ControllerMappingPage(mapping: Map<String, String>, onPick: (String, String) -> Unit, onReset: () -> Unit, onBack: () -> Unit) {
     val host = rememberMenuHost()
     SettingsPage(
-        host, title = "Button mapping", eyebrow = "Controller",
+        host, title = stringResource(R.string.ui_a45672e9), eyebrow = stringResource(R.string.ui_a36a5ffa),
         lede = "Choose what each on-screen button sends to the game. Hidden removes the button.",
         onBack = onBack,
     ) {
-        SettingsGroup("On-screen buttons") {
+        SettingsGroup(stringResource(R.string.ui_4bdafbff)) {
             for ((id, name) in ControllerPrefs.mappable) {
                 ChoiceRow(host, "map-$id", name, null, ControllerPrefs.targets, mapping[id] ?: id) { onPick(id, it) }
             }
         }
         SettingsGroup("Defaults") {
-            ActionRow("Reset mapping", "Every button sends its own input again", "Reset", onReset)
+            ActionRow(stringResource(R.string.ui_9c1887bc), "Every button sends its own input again", stringResource(R.string.ui_44c57abd), onReset)
         }
     }
 }
