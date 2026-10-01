@@ -1,5 +1,7 @@
 package com.droiddeck.launcher.ui
 
+import com.droiddeck.launcher.R
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -64,7 +66,7 @@ fun PhantomProcessGatePage(
         val compact = maxWidth < 620.dp && maxHeight < 500.dp
         SettingsPage(
             host = rememberMenuHost(),
-            title = "One Android setting to change",
+            title = stringResource(R.string.ui_d53a64f0),
             eyebrow = "Steam",
             lede = if (compact) null else "Android stops apps that start lots of background processes, and Steam starts dozens. " +
                 "Until this is changed, games close with no error.",
@@ -123,7 +125,7 @@ private fun FixGroup(
     onCancel: () -> Unit,
 ) {
     val pairing = stage is Stage.Waiting || stage is Stage.CodeNeeded || stage is Stage.Working
-    SettingsGroup(if (hasToggle) "Developer options" else "Fix it for me", compact = compact) {
+    SettingsGroup(if (hasToggle) stringResource(R.string.ui_7ea27f6f) else stringResource(R.string.ui_0c248594), compact = compact) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(if (compact) 10.dp else 14.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -132,13 +134,13 @@ private fun FixGroup(
                 pairing -> PairingProgress(stage, onCancel)
                 hasToggle -> {
                     Body("Turn on “Disable child process restrictions”, then come back. Keep Developer options on afterwards: turning them off turns the switch back off.")
-                    PrimaryButton("Open Developer options", compact = compact, onClick = onOpenDeveloperOptions)
+                    PrimaryButton(stringResource(R.string.ui_30cebca2), compact = compact, onClick = onOpenDeveloperOptions)
                 }
                 else -> {
                     Body("This Android version has no switch for it, so DroidDeck changes it over Wireless debugging on this device. About a minute, no computer needed.")
                     (stage as? Stage.Failed)?.let { Body(it.error, error = true) }
                     PrimaryButton(
-                        if (stage is Stage.Failed) "Try again" else "Fix it for me",
+                        if (stage is Stage.Failed) stringResource(R.string.ui_042c862e) else stringResource(R.string.ui_0c248594),
                         compact = compact,
                         enabled = environment.onWifi && environment.notifications,
                         onClick = onFixWithWirelessDebugging,
@@ -151,7 +153,7 @@ private fun FixGroup(
                 }
                 if (!environment.notifications) {
                     Body("The pairing code is entered in a notification. Allow notifications for DroidDeck, or use Other ways.", warn = true)
-                    SecondaryButton("Allow notifications", compact = compact, onClick = onOpenNotificationSettings)
+                    SecondaryButton(stringResource(R.string.ui_3ad3c4eb), compact = compact, onClick = onOpenNotificationSettings)
                 }
             }
         }
@@ -185,7 +187,7 @@ private fun PairingProgress(stage: Stage, onCancel: () -> Unit) {
         Text(
             when (stage) {
                 Stage.Waiting -> "Waiting for the pairing pop-up…"
-                is Stage.CodeNeeded -> stage.error ?: "Pop-up found. Enter its code in the notification."
+                is Stage.CodeNeeded -> stage.error ?: stringResource(R.string.ui_04d6877a)
                 is Stage.Working -> stage.step
                 else -> ""
             },
@@ -193,7 +195,7 @@ private fun PairingProgress(stage: Stage, onCancel: () -> Unit) {
             color = if (stage is Stage.CodeNeeded && stage.error != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.weight(1f),
         )
-        SecondaryButton("Cancel", compact = true, onClick = onCancel)
+        SecondaryButton(stringResource(R.string.ui_77dfd213), compact = true, onClick = onCancel)
     }
 }
 
@@ -202,7 +204,7 @@ private fun StatusGroup(status: PhantomProcessStatus, compact: Boolean) {
     SettingsGroup("Status", compact = compact) {
         Column(Modifier.fillMaxWidth().padding(if (compact) 10.dp else 14.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(PhantomProcessLimit.title(status), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground)
-            Body("Checking every 2 seconds. This page closes when it's off.")
+            Body(stringResource(R.string.ui_8c2eb245))
         }
     }
 }
@@ -217,12 +219,12 @@ private fun OtherWays(
     onCopyCommand: () -> Unit,
 ) {
     var open by rememberSaveable { mutableStateOf(false) }
-    SettingsGroup("Other ways", compact = compact) {
+    SettingsGroup(stringResource(R.string.ui_dd705eff), compact = compact) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth().clickable { open = !open }.padding(horizontal = 14.dp, vertical = 10.dp),
         ) {
-            Body(if (hasToggle) "Wireless debugging, manual address, computer ADB" else "Manual address, computer ADB, Developer options", modifier = Modifier.weight(1f))
+            Body(if (hasToggle) stringResource(R.string.ui_6bddc81b) else stringResource(R.string.ui_628f67b5), modifier = Modifier.weight(1f))
             Text(if (open) "▴" else "▾", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (open) Column(
@@ -230,20 +232,20 @@ private fun OtherWays(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             if (hasToggle) {
-                SecondaryButton("Use Wireless debugging instead", compact = true, onClick = onFixWithWirelessDebugging)
+                SecondaryButton(stringResource(R.string.ui_35fbef30), compact = true, onClick = onFixWithWirelessDebugging)
             } else {
                 Body("Some ROMs add the switch anyway. Look for “child process” in Developer options.")
-                SecondaryButton("Open Developer options", compact = true, onClick = onOpenDeveloperOptions)
+                SecondaryButton(stringResource(R.string.ui_30cebca2), compact = true, onClick = onOpenDeveloperOptions)
             }
             Body("If the notification doesn't work, enter the pop-up's address and code yourself.")
-            SecondaryButton("Enter address manually", compact = true, onClick = onEnterAddressManually)
-            Body("From a computer with ADB:")
+            SecondaryButton(stringResource(R.string.ui_fec3e385), compact = true, onClick = onEnterAddressManually)
+            Body(stringResource(R.string.ui_c64eb4d9))
             Text(
                 PhantomProcessLimit.adbCommand(),
                 style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace, fontSize = 11.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            SecondaryButton("Copy command", compact = true, onClick = onCopyCommand)
+            SecondaryButton(stringResource(R.string.ui_a8e10478), compact = true, onClick = onCopyCommand)
         }
     }
 }
@@ -271,16 +273,16 @@ fun DeveloperDisplayChoiceDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Open Developer options") },
+        title = { Text(stringResource(R.string.ui_30cebca2)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
                 Text("Choose which display to open Android Settings on.")
-                TextButton(modifier = Modifier.fillMaxWidth(), onClick = onMainScreen) { Text("Main screen") }
+                TextButton(modifier = Modifier.fillMaxWidth(), onClick = onMainScreen) { Text(stringResource(R.string.ui_54d3dfc0)) }
                 displays.forEach { (id, label) ->
                     TextButton(modifier = Modifier.fillMaxWidth(), onClick = { onSecondaryScreen(id) }) { Text(label) }
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_77dfd213)) } },
     )
 }
