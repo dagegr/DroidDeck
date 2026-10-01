@@ -132,6 +132,7 @@ internal fun SetupPanel(
     val host = rememberMenuHost()
     var processLimitBusy by remember { mutableStateOf(false) }
     var processLimitMessage by remember { mutableStateOf<String?>(null) }
+    val wirelessHint = stringResource(R.string.ui_78304579)
     val setProcessLimit: (Boolean) -> Unit = { enabled ->
         processLimitBusy = true
         processLimitMessage = null
@@ -140,7 +141,7 @@ internal fun SetupPanel(
             if (error == null) {
                 a.onRefreshPhantomStatus()
             } else {
-                processLimitMessage = stringResource(R.string.ui_78304579)
+                processLimitMessage = wirelessHint
                 onRequestWirelessAdb(enabled)
             }
         }
